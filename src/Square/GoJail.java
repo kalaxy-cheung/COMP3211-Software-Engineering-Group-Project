@@ -2,17 +2,14 @@ package Square;
 
 import Player.Player;
 
-public class Jail extends Square {
+public class GoJail extends Square {
 
-    public Jail(){
-        this.position = 6;
-        this.type = 3;
-
+    public GoJail(){
+        this.type = 6;
     }
 
     @Override
     public void access(Player player) {
 
     }
-
 }

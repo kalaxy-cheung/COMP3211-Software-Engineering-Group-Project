@@ -1,14 +1,17 @@
 package Square;
 
-public class Square {
+import Player.Player;
+
+public abstract class Square {
     protected int position;
     protected int type;
-
 
     public Square(){
         this.type = 0;
         this.position = 0;
     }
+
+    public abstract void access(Player player);
 
     public int getPosition(){
         return position;
