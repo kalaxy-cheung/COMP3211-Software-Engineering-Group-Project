@@ -14,6 +14,10 @@ class Game {
         this.playerList = playerList;
     }
 
+    public Game() {
+
+    }
+
     public List<PlayerController> getPlayerList() {
         return playerList;
     }
