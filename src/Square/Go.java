@@ -1,4 +1,4 @@
 package Square;
 
-public class Tax {
+public class Go {
 }
