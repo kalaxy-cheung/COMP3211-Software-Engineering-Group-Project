@@ -10,6 +10,11 @@ public class GameBoardController {
         this.gameBoardView = new GameBoardView();
     }
 
+    /*
+    *
+    * Building a custom game board using a json file
+    *
+    */
     public int loadCustomGameBd(String filePath) {
         System.out.println("Loading custom game bd...");
         //TODO
@@ -18,9 +23,6 @@ public class GameBoardController {
         return 0;
     }
 
-    public void displayGameBD(){
-        //TODO
-    }
 
     public GameBoard getGameBoard() {
         return gameBoard;

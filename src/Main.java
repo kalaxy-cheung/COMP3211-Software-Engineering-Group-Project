@@ -9,19 +9,21 @@ public class Main {
         GameController gameController = new GameController();
 
         while (true) {
+            System.out.println("*****************************");
             System.out.println("Welcome to the Monopoly Game!");
             System.out.println("1. Start a new game");
             System.out.println("2. Resume a game");
             System.out.println("3. Design game board");
             System.out.println("4. Quit");
-            System.out.println("Please enter ...");
+            System.out.println("*****************************");
             int function = scanner.nextInt();
 
             switch (function)
             {
                 case 1:
                     // Start a new game
-                    gameController.setGameBoard();
+                    gameController.initializeGameBoard();
+                    gameController.initializeGamePlayer();
                     break;
                 case 2:
                     // Resume a game
