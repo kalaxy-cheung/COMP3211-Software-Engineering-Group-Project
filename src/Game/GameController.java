@@ -106,6 +106,14 @@ public class GameController {
         }
     }
 
+    /*
+    *   game logic
+    */
+    public void startGame() {
+        //The system shall place all player tokens on the "Go" square at the start of the game.
+
+
+    }
 
     /*
     *   load the game data by a json file for resuming a previous game

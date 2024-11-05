@@ -16,15 +16,19 @@ public class Game {
     };
     public List<PlayerController> playerList;
     private GameBoardController gameBoard;
+    private int currRound;
+    private int accumulatedRound;
 
     public Game(List<PlayerController> playerList, GameBoardController gameBoard){
         this.gameBoard = gameBoard;
         this.playerList = playerList;
+        this.currRound = 1;
     }
 
     public Game() {
         this.playerList = new ArrayList<>();
         this.gameBoard = new GameBoardController();
+        this.currRound = 1;
     }
 
     public List<PlayerController> getPlayerList() {
