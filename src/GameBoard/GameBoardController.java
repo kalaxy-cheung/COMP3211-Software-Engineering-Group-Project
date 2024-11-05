@@ -1,5 +1,7 @@
 package GameBoard;
 
+import Square.Square;
+
 public class GameBoardController {
     private GameBoard gameBoard;
     private GameBoardView gameBoardView;
@@ -10,6 +12,10 @@ public class GameBoardController {
         this.gameBoardView = new GameBoardView();
         //TODO
         //1. create default game board for initialization
+    }
+
+    public Square getSquareByPosition(int position) {
+        return this.gameBoard.getSquareList().get(position);
     }
 
     /*

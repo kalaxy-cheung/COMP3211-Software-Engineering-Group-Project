@@ -10,13 +10,18 @@ public class Property extends Square {
     private int rent;
     private Player owner;
 
+    public Property(String name, int price, int rent) {
+        this.name = name;
+        this.price = price;
+        this.rent = rent;
+        this.owner = null;
+    }
+
     public Property(){
-        this.position = 0;
         this.type = 1;
         this.name = "";
         this.price = 0;
         this.owner = null;
-
     }
 
     @Override
