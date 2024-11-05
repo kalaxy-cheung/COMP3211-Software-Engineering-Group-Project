@@ -54,7 +54,7 @@ public class Property extends Square {
             owner.setBalance(owner.getBalance() + rent);  // Add the rent to the owner's balance
         }
 
-        myObj.close();  // Close the scanner to prevent resource leaks
+        myObj.close();  // Close the scanner
     }
 
     public String getName(){
