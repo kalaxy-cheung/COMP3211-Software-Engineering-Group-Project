@@ -1,12 +1,11 @@
 package Game;
 
+import Dice.FourSidedDice;
 import GameBoard.GameBoardController;
+import Player.Player;
 import Player.PlayerController;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class GameController {
     private Game game;
@@ -55,9 +54,9 @@ public class GameController {
             while(res != 0) {
                 System.out.println("Please enter custom game board file path");
                 String filePath = scanner.next();
-                res = this.game.getGameBoard().loadCustomGameBd(filePath);
+                res = this.game.getGameBoardController().loadCustomGameBd(filePath);
                 if(res != 0) {
-                    System.out.printf("Load custom game board fail! %s%n", this.game.getGameBoard().errorMsg);
+                    System.out.printf("Load custom game board fail! %s%n", this.game.getGameBoardController().errorMsg);
                 }
             }
         }
@@ -79,6 +78,7 @@ public class GameController {
                 System.out.println("Invalid number of players. Please try again.");
             }
         }
+        game.setPlayerNum(numPlayers);
         System.out.println("Number of players set to: " + numPlayers);
 
         Set<String> playerNames = new HashSet<>();
@@ -111,8 +111,63 @@ public class GameController {
     */
     public void startGame() {
         //The system shall place all player tokens on the "Go" square at the start of the game.
+        initPlayerPos();
 
+        //The system shall end the game when only one player remains or after 100 rounds.
+        while(game.currRound <= Game.MAX_ROUNDS && game.getPlayerNum()>1) {
 
+            for (int i=0; i<game.playerList.size(); i++){
+                PlayerController playerController = game.playerList.poll();
+                game.getGameBoardController().getGameBoardView().displayGameBD();
+                gameView.printAllPlayerPosition(game.playerList);
+                // roll the dice
+                System.out.println("Rolling dice...");
+                FourSidedDice dice = new FourSidedDice();
+                int diceResult = dice.rollTwoDice();
+                System.out.println("Rolling dice result: "+diceResult);
+
+                // print the updated user position
+                game.getGameBoardController().getGameBoardView().displayGameBD();
+                playerController.getPlayer().setCurrGameBdPosition(playerController.getPlayer().getCurrGameBdPosition()+diceResult);
+                //gameView.printCurrPlayerPosition(this.game.playerList.peek());
+            }
+
+            game.currRound++;
+        }
+
+        if(game.getPlayerNum()>1){
+            List<Player> winners = getRichestPlayers();
+            gameView.printWinners(winners);
+        }
+        else {
+            assert game.playerList.peek() != null;
+            Player winner = game.playerList.peek().getPlayer();
+            gameView.printWinners(winner);
+        }
+    }
+
+    public void initPlayerPos(){
+        for(var player : game.playerList) {
+            player.getPlayer().setCurrGameBdPosition(game.getGameBoardController().getGameBoard().getStartSquareIndex());
+        }
+    }
+
+    public List<Player> getRichestPlayers(){
+        List<Player> res = new ArrayList<Player>();
+        int largest = Integer.MIN_VALUE;
+        for(var player : game.playerList) {
+            if(player.getPlayer().getBalance() > largest) {
+                largest = player.getPlayer().getBalance();
+            }
+        }
+
+        for(var player : game.playerList) {
+            if(player.getPlayer().getBalance() == largest) {
+                res.add(player.getPlayer());
+            }
+        }
+
+        return  res;
     }
 
     /*

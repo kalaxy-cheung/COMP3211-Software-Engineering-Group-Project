@@ -1,10 +1,9 @@
 package Player;
 
-import javax.swing.text.PlainView;
 
 public class PlayerController {
     private Player player;
-    private PlainView playerView;
+    private PlayerView playerView;
 
     public PlayerController(String playerName) {
         this.player = new Player(playerName);
@@ -16,5 +15,13 @@ public class PlayerController {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public PlayerView getPlayerView() {
+        return playerView;
+    }
+
+    public void setPlayerView(PlayerView playerView) {
+        this.playerView = playerView;
     }
 }

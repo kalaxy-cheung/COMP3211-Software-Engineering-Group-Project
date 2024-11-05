@@ -11,4 +11,12 @@ public class GameBoard {
     public GameBoard() {
 
     }
+
+    public int getStartSquareIndex() {
+        return startSquareIndex;
+    }
+
+    public void setStartSquareIndex(int startSquareIndex) {
+        this.startSquareIndex = startSquareIndex;
+    }
 }

@@ -14,12 +14,14 @@ public class FourSidedDice {
         return random.nextInt(4) + 1; // Returns a number between 1 and 4
     }
 
-    public static void main(String[] args) {
-        FourSidedDice dice = new FourSidedDice();
-
-        // Rolling 2 dice at the same time
+    // Rolling 2 dice at the same time
+    public int rollTwoDice()
+    {
+        int res = 0;
         for (int i = 0; i < 2; i++) {
-            System.out.println("Dice " + (i + 1) + ": " + dice.roll());
+            res += roll();
         }
+        return res;
     }
+
 }
