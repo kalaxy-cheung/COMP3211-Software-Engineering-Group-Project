@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <MonopolyGame>
+        <PlayerList></PlayerList>
+
+        <GameBoard>
+            <squares>
+                <position>1</position>
+                <type>Go</type>
+            </squares>
+            <squares>
+                <position>2</position>
+                <type>Property</type>
+                <name>Central</name>
+                <price>800</price>
+                <rent>90</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>3</position>
+                <type>Property</type>
+                <name>Wan Chai</name>
+                <price>700</price>
+                <rent>65</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>4</position>
+                <type>Income Tax</type>
+            </squares>
+            <squares>
+                <position>5</position>
+                <type>Property</type>
+                <name>Stanley</name>
+                <price>600</price>
+                <rent>60</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>6</position>
+                <type>Jail</type>
+            </squares>
+            <squares>
+                <position>7</position>
+                <type>Property</type>
+                <name>Shek O</name>
+                <price>400</price>
+                <rent>10</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>8</position>
+                <type>Property</type>
+                <name>Mong Kok</name>
+                <price>500</price>
+                <rent>40</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>9</position>
+                <type>Chance</type>
+            </squares>
+            <squares>
+                <position>10</position>
+                <type>Property</type>
+                <name>Tsing Yi</name>
+                <price>400</price>
+                <rent>15</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>11</position>
+                <type>Free Parking</type>
+            </squares>
+            <squares>
+                <position>12</position>
+                <type>Property</type>
+                <name>Shatin</name>
+                <price>700</price>
+                <rent>75</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>13</position>
+                <type>Chance</type>
+            </squares>
+            <squares>
+                <position>14</position>
+                <type>Property</type>
+                <name>Tuen Mun</name>
+                <price>400</price>
+                <rent>20</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>15</position>
+                <type>Property</type>
+                <name>Tai Po</name>
+                <price>500</price>
+                <rent>25</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>16</position>
+                <type>Go Jail</type>
+            </squares>
+            <squares>
+                <position>17</position>
+                <type>Property</type>
+                <name>Sai Kung</name>
+                <price>400</price>
+                <rent>10</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>18</position>
+                <type>Property</type>
+                <name>Yuen Long</name>
+                <price>400</price>
+                <rent>25</rent>
+                <owner></owner>
+            </squares>
+            <squares>
+                <position>20</position>
+                <type>Property</type>
+                <name>Tai O</name>
+                <price>600</price>
+                <rent>25</rent>
+                <owner></owner>
+            </squares>
+        </GameBoard>
+    </MonopolyGame>
+</root>

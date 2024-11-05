@@ -4,6 +4,7 @@ import Dice.FourSidedDice;
 import GameBoard.GameBoardController;
 import Player.Player;
 import Player.PlayerController;
+import Square.Square;
 
 import java.util.*;
 
@@ -120,16 +121,29 @@ public class GameController {
                 PlayerController playerController = game.playerList.poll();
                 game.getGameBoardController().getGameBoardView().displayGameBD();
                 gameView.printAllPlayerPosition(game.playerList);
-                // roll the dice
-                System.out.println("Rolling dice...");
-                FourSidedDice dice = new FourSidedDice();
-                int diceResult = dice.rollTwoDice();
-                System.out.println("Rolling dice result: "+diceResult);
 
-                // print the updated user position
-                game.getGameBoardController().getGameBoardView().displayGameBD();
-                playerController.getPlayer().setCurrGameBdPosition(playerController.getPlayer().getCurrGameBdPosition()+diceResult);
-                //gameView.printCurrPlayerPosition(this.game.playerList.peek());
+                if(playerController.getPlayer().isInJail())
+                {
+                    game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition())
+                            .access(playerController.getPlayer());
+                }
+
+                if(!playerController.getPlayer().isInJail()){
+                    // roll the dice
+                    System.out.println("Rolling dice...");
+                    FourSidedDice dice = new FourSidedDice();
+                    int diceResult = dice.rollTwoDice();
+                    System.out.println("Rolling dice result: "+diceResult);
+
+                    // print the updated user position
+                    game.getGameBoardController().getGameBoardView().displayGameBD();
+                    playerController.getPlayer().setCurrGameBdPosition(playerController.getPlayer().getCurrGameBdPosition()+diceResult);
+                    playerController.getPlayerView().printPlayerPosition(playerController.getPlayer());
+
+                    // start the Squares actions
+                    Square square = game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition());
+                    square.access(playerController.getPlayer());
+                }
             }
 
             game.currRound++;
