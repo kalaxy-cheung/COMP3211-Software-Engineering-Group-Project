@@ -128,13 +128,20 @@ public class GameController {
                             .access(playerController.getPlayer());
                 }
 
-                if(!playerController.getPlayer().isInJail()){
-                    // roll the dice
-                    System.out.println("Rolling dice...");
-                    FourSidedDice dice = new FourSidedDice();
-                    int diceResult = dice.rollTwoDice();
-                    System.out.println("Rolling dice result: "+diceResult);
 
+                if(!playerController.getPlayer().isInJail()){
+                    int diceResult = 0;
+                    if (playerController.getPlayer().getReleaseFromJailRoll() == 0) {
+                        // roll the dice
+                        System.out.println("Rolling dice...");
+                        FourSidedDice dice = new FourSidedDice();
+                         diceResult = dice.rollTwoDice();
+                        System.out.println("Rolling dice result: " + diceResult);
+                    } else {
+                        diceResult = playerController.getPlayer().getReleaseFromJailRoll();
+                        playerController.getPlayer().setReleaseFromJailRoll(0);
+
+                    }
                     // print the updated user position
                     game.getGameBoardController().getGameBoardView().displayGameBD();
                     playerController.getPlayer().setCurrGameBdPosition(playerController.getPlayer().getCurrGameBdPosition()+diceResult);
@@ -144,6 +151,7 @@ public class GameController {
                     Square square = game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition());
                     square.access(playerController.getPlayer());
                 }
+
             }
 
             game.currRound++;

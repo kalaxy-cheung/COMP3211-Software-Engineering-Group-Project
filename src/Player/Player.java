@@ -7,6 +7,16 @@ public class Player {
     private boolean inJail;
     private int turnsInJail;
 
+    public int getReleaseFromJailRoll() {
+        return releaseFromJailRoll;
+    }
+
+    public void setReleaseFromJailRoll(int releaseFromJailRoll) {
+        this.releaseFromJailRoll = releaseFromJailRoll;
+    }
+
+    private int releaseFromJailRoll;
+
     public Player(String name) {
         this.name = name;
         this.balance = 0;
@@ -36,7 +46,7 @@ public class Player {
     }
 
     public void setCurrGameBdPosition(int currGameBdPosition) {
-        this.currGameBdPosition = currGameBdPosition;
+        this.currGameBdPosition = ((currGameBdPosition - 1) % 20) + 1;
     }
 
     public boolean isInJail() {
