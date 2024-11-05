@@ -8,6 +8,8 @@ public class GameBoardController {
     public GameBoardController() {
         this.gameBoard = new GameBoard();
         this.gameBoardView = new GameBoardView();
+        //TODO
+        //1. create default game board for initialization
     }
 
     /*

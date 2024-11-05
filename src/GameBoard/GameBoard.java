@@ -1,9 +1,22 @@
 package GameBoard;
 
+import Square.Square;
+
+import java.util.List;
+
 public class GameBoard {
+    private List<Square> squareList;
+    private int startSquareIndex;
 
     public GameBoard() {
-        //TODO
-        //1. create default game board for initialization
+
+    }
+
+    public int getStartSquareIndex() {
+        return startSquareIndex;
+    }
+
+    public void setStartSquareIndex(int startSquareIndex) {
+        this.startSquareIndex = startSquareIndex;
     }
 }
