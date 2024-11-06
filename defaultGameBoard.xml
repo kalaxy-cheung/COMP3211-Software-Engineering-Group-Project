@@ -4,125 +4,80 @@
         <PlayerList></PlayerList>
 
         <GameBoard>
-            <squares>
-                <position>1</position>
-                <type>Go</type>
-            </squares>
-            <squares>
-                <position>2</position>
-                <type>Property</type>
+            <squares position="1" type="Go"></squares>
+            <squares position="2" type="Property">
                 <name>Central</name>
                 <price>800</price>
                 <rent>90</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>3</position>
-                <type>Property</type>
+            <squares position="3" type="Property">
                 <name>Wan Chai</name>
                 <price>700</price>
                 <rent>65</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>4</position>
-                <type>Income Tax</type>
-            </squares>
-            <squares>
-                <position>5</position>
-                <type>Property</type>
+            <squares position="4" type="IncomeTax"></squares>
+            <squares position="5" type="Property">
                 <name>Stanley</name>
                 <price>600</price>
                 <rent>60</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>6</position>
-                <type>Jail</type>
-            </squares>
-            <squares>
-                <position>7</position>
-                <type>Property</type>
+            <squares position="6" type="Jail"></squares>
+            <squares position="7" type="Property">
                 <name>Shek O</name>
                 <price>400</price>
                 <rent>10</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>8</position>
-                <type>Property</type>
+            <squares position="8" type="Property">
                 <name>Mong Kok</name>
                 <price>500</price>
                 <rent>40</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>9</position>
-                <type>Chance</type>
-            </squares>
-            <squares>
-                <position>10</position>
-                <type>Property</type>
+            <squares position="9" type="Chance"></squares>
+            <squares position="10" type="Property">
                 <name>Tsing Yi</name>
                 <price>400</price>
                 <rent>15</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>11</position>
-                <type>Free Parking</type>
-            </squares>
-            <squares>
-                <position>12</position>
-                <type>Property</type>
+            <squares position="11" type="FreeParking"></squares>
+            <squares position="12" type="Property">
                 <name>Shatin</name>
                 <price>700</price>
                 <rent>75</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>13</position>
-                <type>Chance</type>
-            </squares>
-            <squares>
-                <position>14</position>
-                <type>Property</type>
+            <squares position="13" type="Chance"></squares>
+            <squares position="14" type="Property">
                 <name>Tuen Mun</name>
                 <price>400</price>
                 <rent>20</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>15</position>
-                <type>Property</type>
+            <squares position="15" type="Property">
                 <name>Tai Po</name>
                 <price>500</price>
                 <rent>25</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>16</position>
-                <type>Go Jail</type>
-            </squares>
-            <squares>
-                <position>17</position>
-                <type>Property</type>
+            <squares position="16" type="GoJail"></squares>
+            <squares position="17" type="Property">
                 <name>Sai Kung</name>
                 <price>400</price>
                 <rent>10</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>18</position>
-                <type>Property</type>
+            <squares position="18" type="Property">
                 <name>Yuen Long</name>
                 <price>400</price>
                 <rent>25</rent>
                 <owner></owner>
             </squares>
-            <squares>
-                <position>20</position>
-                <type>Property</type>
+            <squares position="20" type="Property">
                 <name>Tai O</name>
                 <price>600</price>
                 <rent>25</rent>
