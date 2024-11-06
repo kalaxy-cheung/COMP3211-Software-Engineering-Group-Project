@@ -27,11 +27,12 @@ public class GameBoardController {
 
     /*
     *
-    * Building a custom game board using a json file
+    * Building a custom game board using a xml file
     *
     */
     public int loadCustomGameBd(String filePath) {
         System.out.println("Loading custom game bd...");
+        boolean startInitialized = false;
 
         try{
             File fXmlFile = new File(filePath);
@@ -98,20 +99,25 @@ public class GameBoardController {
                         break;
 
                     case "Go":
+                        if (startInitialized) {
+                            System.err.println(position + " start position duplicated!");
+                            throw new IllegalArgumentException(position + " start position duplicated!");
+                        }
                         System.out.println(position + " created Go square.");
                         // Add logic for handling Go
                         this.gameBoard.getSquareList().add(new Go());
                         this.gameBoard.setStartSquareIndex(Integer.parseInt(position));
+                        startInitialized = true;
                         break;
 
                     default:
                         System.err.println(position + " has an unknown square type: " + squareType);
-                        // Handle unknown types if necessary
                         throw new IllegalArgumentException(position + " has an unknown square type: " + squareType);
                 }
             }
+
         }catch (Exception e) {
-            e.printStackTrace();
+            return -1;
         }
 
         return 0;
