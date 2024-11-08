@@ -64,7 +64,7 @@ public class GameBoardController {
                         String price = eElement.getElementsByTagName("price").item(0).getTextContent();
                         String rent = eElement.getElementsByTagName("rent").item(0).getTextContent();
                         String owner = eElement.getElementsByTagName("owner").item(0).getTextContent();
-                        Property property = new Property(name, owner, Integer.parseInt(price), Integer.parseInt(rent));
+                        Property property = new Property(name, Integer.parseInt(price), Integer.parseInt(rent));
                         this.gameBoard.getSquareList().add(property);
                         break;
 

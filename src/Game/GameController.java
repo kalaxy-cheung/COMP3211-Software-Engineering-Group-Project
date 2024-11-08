@@ -128,7 +128,6 @@ public class GameController {
                             .access(playerController.getPlayer());
                 }
 
-
                 if(!playerController.getPlayer().isInJail()){
                     int diceResult = 0;
                     if (playerController.getPlayer().getReleaseFromJailRoll() == 0) {
@@ -142,10 +141,22 @@ public class GameController {
                         playerController.getPlayer().setReleaseFromJailRoll(0);
 
                     }
+                    // Save initial position of player before update
+                    int currentPos = playerController.getPlayer().getCurrGameBdPosition();
+
                     // print the updated user position
                     game.getGameBoardController().getGameBoardView().displayGameBD();
                     playerController.getPlayer().setCurrGameBdPosition(playerController.getPlayer().getCurrGameBdPosition()+diceResult);
                     playerController.getPlayerView().printPlayerPosition(playerController.getPlayer());
+
+                    // Save updated position
+                    int newPos = playerController.getPlayer().getCurrGameBdPosition();
+
+                    // Check whether player has passed GO
+                    if ((newPos - currentPos) < 0) {
+                        Square goSquare = game.getGameBoardController().getSquareByPosition(1);
+                        goSquare.access(playerController.getPlayer());
+                    }
 
                     // start the Squares actions
                     Square square = game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition());

@@ -7,68 +7,67 @@ import java.util.Scanner;
 
 public class Jail extends Square {
 
-    public Jail(){
+    public Jail() {
         this.position = 6;
         this.type = 3;
-
     }
 
     @Override
     public void access(Player player) {
         if (!player.isInJail()) {
+            System.out.println("Just visiting Jail.");
             return;
         }
+
+        // Increment turns in jail
         player.setTurnsInJail(player.getTurnsInJail() + 1);
-        System.out.println("You try to throw for doubles!");
+        System.out.println("Turn in Jail: " + player.getTurnsInJail());
 
         FourSidedDice dice = new FourSidedDice();
-
         int firstResult = dice.roll();
         int secondResult = dice.roll();
 
-        System.out.println("You try to throw for doubles!");
+        System.out.println("Rolling dice...");
         System.out.println("First dice result: " + firstResult);
         System.out.println("Second dice result: " + secondResult);
 
+        // Case 1: Player rolls doubles
         if (firstResult == secondResult) {
             System.out.println("You rolled doubles!");
+            System.out.println("You are freed from Jail!");
             player.setReleaseFromJailRoll(firstResult + secondResult);
-            player.setInJail(false);
+            player.setInJail(false); // Release the player
+            player.setTurnsInJail(0); // Reset turns in jail
             return;
         }
-        else {
-            System.out.println("You failed!");
-            player.setReleaseFromJailRoll(firstResult + secondResult);
-        }
 
-        Scanner myObj = new Scanner(System.in);
+        System.out.println("You didn't roll doubles!");
 
-        if (!(player.getTurnsInJail() == 3)) {
+        // Case 2: Player chooses to pay the fine before third turn
+        if (player.getTurnsInJail() < 3) {
             System.out.println("Do you wish to pay the fine of 150? (Y/N)");
-            String response = myObj.nextLine();
+            Scanner scanner = new Scanner(System.in);
+            String response = scanner.nextLine();
 
             while (!response.equals("Y") && !response.equals("N")) {
                 System.out.println("Invalid input! Please try again.");
-                response = myObj.nextLine();
+                response = scanner.nextLine();
             }
 
             if (response.equals("Y")) {
+                System.out.println("You paid the fine of 150!");
                 player.setBalance(player.getBalance() - 150);
-                System.out.println("You paid the fee of 150 to leave Jail!");
-                player.setTurnsInJail(0);
-                player.setInJail(false);
-                myObj.close();
-
+                player.setInJail(false); // Release the player
+                player.setTurnsInJail(0); // Reset turns in jail
             } else {
-                System.out.println("You chose not to pay the fine. Try again next turn!");
+                System.out.println("You chose not to pay the fine. You stay in jail.");
             }
-        }
-        else {
-            System.out.println("You have to pay the fine!");
+        } else {
+            // Case 3: Player is forced to pay the fine on the third turn
+            System.out.println("You've been in jail for 3 turns. You must pay the fine of 150!");
             player.setBalance(player.getBalance() - 150);
-            player.setTurnsInJail(0);
-            player.setInJail(false);
-            myObj.close();
+            player.setInJail(false); // Release the player
+            player.setTurnsInJail(0); // Reset turns in jail
         }
     }
 }

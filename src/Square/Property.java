@@ -10,15 +10,11 @@
         private int rent;
         private Player owner;
 
-    public Property(String name, String ownerName, int price, int rent) {
+    public Property(String name, int price, int rent) {
         this.name = name;
         this.price = price;
         this.rent = rent;
-        if(!ownerName.isEmpty() && ownerName != null)
-        {
-            this.owner = new Player(ownerName);
-        }
-        else this.owner = null;
+        this.owner = null;
     }
 
         public Property() {

@@ -4,7 +4,9 @@ import Player.Player;
 import Square.Property;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.io.ByteArrayInputStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PropertyTest {
@@ -15,10 +17,8 @@ class PropertyTest {
 
     @BeforeEach
     void setUp() {
-        property = new Property();
-        property.setName("Test Property");
-        property.setPrice(200);
-        property.setRent(50);
+        // Initialize property with the constructor
+        property = new Property("Test Property", 200, 50);
         player = new Player("Player1");
         player.setBalance(500);
         owner = new Player("OwnerPlayer");

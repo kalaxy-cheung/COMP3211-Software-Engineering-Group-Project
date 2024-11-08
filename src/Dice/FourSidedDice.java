@@ -17,11 +17,11 @@ public class FourSidedDice {
     // Rolling 2 dice at the same time
     public int rollTwoDice()
     {
-        int res = 0;
+        int result = 0;
         for (int i = 0; i < 2; i++) {
-            res += roll();
+            result += roll();
         }
-        return res;
+        return result;
     }
 
 }
