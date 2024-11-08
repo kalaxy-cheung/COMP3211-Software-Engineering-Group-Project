@@ -24,6 +24,7 @@ public class Main {
                     // Start a new game
                     gameController.initializeGameBoard();
                     gameController.initializeGamePlayer();
+                    gameController.startGame();
                     break;
                 case 2:
                     // Resume a game

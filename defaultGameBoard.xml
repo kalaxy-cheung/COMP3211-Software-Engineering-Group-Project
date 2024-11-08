@@ -77,6 +77,7 @@
                 <rent>25</rent>
                 <owner></owner>
             </squares>
+            <squares position="19" type="Chance"></squares>
             <squares position="20" type="Property">
                 <name>Tai O</name>
                 <price>600</price>

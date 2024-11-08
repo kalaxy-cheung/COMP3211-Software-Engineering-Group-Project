@@ -43,6 +43,11 @@ public class GameBoardController {
 
             // Load Game Board Squares
             NodeList squareList = doc.getElementsByTagName("squares");
+            if(squareList.getLength() != 20) {
+                System.err.println("Error: the number of squares should be 20!");
+                throw new IllegalArgumentException("Error: the number of squares should be 20!");
+            }
+
             for (int i = 0; i < squareList.getLength(); i++) {
                 Node squareNode = squareList.item(i);
                 Element eElement = (Element) squareNode;
