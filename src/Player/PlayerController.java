@@ -19,6 +19,12 @@ public class PlayerController {
     public PlayerController(String playerName) {
         this.player = new Player(playerName);
         this.playerList = new ArrayList<>();
+        this.playerView = new PlayerView();
+    }
+
+    public PlayerController(Player player) {
+        this.player = player;
+        this.playerView = new PlayerView();
     }
 
     public List<Player> getPlayerList() {
@@ -101,9 +107,6 @@ public class PlayerController {
                         player.setTurnsInJail(turnsInJail);
 
                         // Add player to list
-                        if (this.playerList == null) {
-                            this.playerList = new ArrayList<>();
-                        }
                         this.playerList.add(player);
                     }
                 }

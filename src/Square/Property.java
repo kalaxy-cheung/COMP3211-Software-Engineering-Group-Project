@@ -59,7 +59,6 @@
                 owner.setBalance(owner.getBalance() + rent);  // Add the rent to the owner's balance
             }
 
-            myObj.close();  // Close the scanner
         }
 
         public String getName(){

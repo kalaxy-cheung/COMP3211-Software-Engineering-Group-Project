@@ -9,6 +9,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import java.io.File;
 
+
+
 public class GameBoardController {
     private GameBoard gameBoard;
     private GameBoardView gameBoardView;
@@ -22,7 +24,7 @@ public class GameBoardController {
     }
 
     public Square getSquareByPosition(int position) {
-        return this.gameBoard.getSquareList().get(position);
+        return this.gameBoard.getSquareList().get(position - 1);
     }
 
     /*

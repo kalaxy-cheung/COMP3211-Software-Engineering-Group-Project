@@ -24,12 +24,15 @@ public class Main {
                     // Start a new game
                     gameController.initializeGameBoard();
                     gameController.initializeGamePlayer();
+                    gameController.startGame();
                     break;
                 case 2:
                     // Resume a game
+                    gameController.setisNewGame(false);
                     System.out.println("Please input the game data file path");
                     String filePath = scanner.next();
                     gameController.loadGameData(filePath);
+                    gameController.startGame();
                     break;
                 case 3:
                     // Design game board

@@ -8,6 +8,9 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class GameView {
+    public GameView() {
+    }
+
     public void printUserCommands() {
         Scanner scanner = new Scanner(System.in);
         int function = 0;
@@ -26,10 +29,11 @@ public class GameView {
     }
 
     public void printAllPlayerPosition(Queue<PlayerController> playerList) {
-        System.out.println("Player position:");
+        System.out.println("\nPlayer position:");
         for (var player : playerList) {
             player.getPlayerView().printPlayerPosition(player.getPlayer());
         }
+        System.out.println(" ");
     }
 
     public void printPlayerNameInOrder(List<PlayerController> playerList) {

@@ -20,9 +20,6 @@ public class Game {
     public Queue<PlayerController> playerList;
     private GameBoardController gameBoard;
     public int currRound;
-    private int playerNum;
-    //public int currPlayerTurn;
-    //public int accumulatedRound;
 
     public Game(Queue<PlayerController> playerList, GameBoardController gameBoard){
         this.gameBoard = gameBoard;
@@ -44,11 +41,4 @@ public class Game {
         this.gameBoard = gameBoard;
     }
 
-    public int getPlayerNum() {
-        return playerNum;
-    }
-
-    public void setPlayerNum(int playerNum) {
-        this.playerNum = playerNum;
-    }
 }

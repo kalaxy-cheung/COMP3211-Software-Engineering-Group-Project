@@ -117,7 +117,7 @@ class JailTest {
     @Test
     void testAccess_PlayerForcedToPayFineAfterThreeTurns() {
         player.setInJail(true); // Player is in jail
-        player.setTurnsInJail(2); // Third turn in jail
+        player.setTurnsInJail(3); // Third turn in jail
         player.setBalance(200); // Sufficient balance
 
         FourSidedDice mockDice = new FourSidedDice() {
