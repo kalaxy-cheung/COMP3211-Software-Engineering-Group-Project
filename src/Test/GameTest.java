@@ -1,6 +1,7 @@
 package Test;
 
 import Game.GameController;
+import Dice.FourSidedDice;
 import Player.PlayerController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class GameTest {
         expectedNames.add("Charlie");
 
         List<String> res = new ArrayList<>();
-        for (var player: gameController.getGame().playerList) {
+        for (var player : gameController.getGame().playerList) {
             res.add(player.getPlayer().getName());
         }
 
@@ -78,4 +79,14 @@ class GameTest {
         // Verify that only unique names are added
         assertEquals(3, gameController.getGame().playerList.size()); // Only Alice and Bob should be added
     }
+
+    @Test
+    void testRoll() {
+        FourSidedDice dice = new FourSidedDice();
+        for (int i = 0; i < 10; i++) {
+            assertTrue(dice.roll() < 5);
+            assertTrue(dice.roll() > 0);
+        }
+    }
+
 }

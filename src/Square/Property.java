@@ -10,12 +10,23 @@
         private int rent;
         private Player owner;
 
-    public Property(String name, int price, int rent) {
+    public Property(String name, String ownerName, int price, int rent) {
         this.name = name;
         this.price = price;
         this.rent = rent;
-        this.owner = null;
+        if(!ownerName.isEmpty() && ownerName != null)
+        {
+            this.owner = new Player(ownerName);
+        }
+        else this.owner = null;
     }
+
+        public Property() {
+            this.name = null;
+            this.price = 0;
+            this.rent = 0;
+            this.owner = null;
+        }
 
         @Override
         public void access(Player player) {

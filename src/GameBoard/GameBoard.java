@@ -2,6 +2,7 @@ package GameBoard;
 
 import Square.Square;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameBoard {
@@ -10,7 +11,7 @@ public class GameBoard {
     private int startSquareIndex;
 
     public GameBoard() {
-
+        this.squareList = new ArrayList<>();
     }
 
     public int getStartSquareIndex() {
