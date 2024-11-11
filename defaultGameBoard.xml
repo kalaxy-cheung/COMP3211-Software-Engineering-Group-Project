@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
     <MonopolyGame>
-        <PlayerList></PlayerList>
+        <PlayerList>
+                <Player>
+                    <Name>John Doe</Name>
+                    <Balance>1240</Balance>
+                    <CurrentGameBoardPosition>5</CurrentGameBoardPosition>
+                    <InJail>false</InJail>
+                    <TurnsInJail>0</TurnsInJail>
+                </Player>
+                <Player>
+                    <Name>Jane Smith</Name>
+                    <Balance>1820</Balance>
+                    <CurrentGameBoardPosition>17</CurrentGameBoardPosition>
+                    <InJail>false</InJail>
+                    <TurnsInJail>0</TurnsInJail>
+                </Player>
+        </PlayerList>
 
         <GameBoard>
             <squares position="1" type="Go"></squares>

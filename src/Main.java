@@ -28,9 +28,11 @@ public class Main {
                     break;
                 case 2:
                     // Resume a game
+                    gameController.setisNewGame(false);
                     System.out.println("Please input the game data file path");
                     String filePath = scanner.next();
                     gameController.loadGameData(filePath);
+                    gameController.startGame();
                     break;
                 case 3:
                     // Design game board
