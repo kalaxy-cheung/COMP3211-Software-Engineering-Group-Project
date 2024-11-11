@@ -17,8 +17,6 @@ public class GameBoardController {
     public GameBoardController() {
         this.gameBoard = new GameBoard();
         this.gameBoardView = new GameBoardView();
-        //TODO
-        //1. create default game board for initialization
     }
 
     public Square getSquareByPosition(int position) {
@@ -27,15 +25,21 @@ public class GameBoardController {
 
     /*
     *
-    * Building a custom game board using a xml file
+    * Building a game board using a xml file
     *
     */
-    public int loadCustomGameBd(String filePath) {
-        System.out.println("Loading custom game bd...");
+    public int loadGameBd(String filePath) {
+        File fXmlFile = new File(filePath);
+        if(filePath.isEmpty() || !fXmlFile.exists())
+        {
+            //Default game board for initialization
+            fXmlFile = new File(System.getProperty("user.dir") + "defaultGameBoard.xml");
+        }
+
+        System.out.println("Loading game board from " + filePath + "...");
         boolean startInitialized = false;
 
         try{
-            File fXmlFile = new File(filePath);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
