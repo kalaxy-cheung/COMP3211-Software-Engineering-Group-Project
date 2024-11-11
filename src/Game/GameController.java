@@ -223,11 +223,9 @@ public class GameController {
     public int loadGameData(String filePath) {
         System.out.printf("Loading the game from %s%n", filePath);
 
-        System.out.print("Reading GameBoard....\n\n");
-        this.game.getGameBoardController().loadCustomGameBd(filePath);
+        this.game.getGameBoardController().loadGameBd(filePath);
 
         System.out.print("\nReading Players....\n");
-
         try {
             File xmlFile = new File(filePath);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

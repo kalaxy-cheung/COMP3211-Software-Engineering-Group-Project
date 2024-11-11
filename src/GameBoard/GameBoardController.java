@@ -10,7 +10,6 @@ import org.w3c.dom.Element;
 import java.io.File;
 
 
-
 public class GameBoardController {
     private GameBoard gameBoard;
     private GameBoardView gameBoardView;
@@ -149,5 +148,6 @@ public class GameBoardController {
     public void setGameBoardView(GameBoardView gameBoardView) {
         this.gameBoardView = gameBoardView;
     }
+
 }
 
