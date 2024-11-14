@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="COMP3211-Software-Engineering-Group-Project" />
         <module name="COMP3211 Software Engineering Group Project" />
       </profile>
     </annotationProcessing>
