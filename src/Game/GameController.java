@@ -124,6 +124,7 @@ public class GameController {
     *   game logic
     */
     public void startGame() {
+        Scanner scanner = new Scanner(System.in);
 
         //The system shall place all player tokens on the "Go" square at the start of the game.
         if(isNewGame) {
@@ -150,52 +151,86 @@ public class GameController {
 
                 PlayerController playerController = game.playerList.poll();
 
+                boolean threwDice = false;
+                while (!threwDice) {
+
+                    // Display menu options for user input
+                    System.out.println("");
+                    System.out.println("1. Roll dice");
+                    System.out.println("2. Query the next player");
+                    System.out.println("3. Display player(s) status");
+                    System.out.println("4. Display game board");
+                    System.out.println("5. Save game");
+                    System.out.print("Please enter your choice (1-5): ");
+
+                    // Read user input
+                    int function = scanner.nextInt();
+
+                    // Validate user input
+                    if (function < 1 || function > 5) {
+                        System.out.println("Invalid command! Please enter a number between 1 and 5.");
+                    } else {
+                        // Handle valid commands
+                        switch (function) {
+                            case 1:
+                                threwDice = true; // Assuming this indicates that dice have been rolled
+                                break;
+                            case 2:
+                                System.out.println("The next player is " + this.game.playerList.peek().getPlayer().getName());
+                                break;
+                            case 3:
+                                System.out.println("Displaying player(s) status...");
+                                displayPlyerStatus();
+                                break;
+                            case 4:
+                                game.getGameBoardController().getGameBoardView().displayGameBD();
+                                break;
+                            case 5:
+                                System.out.println("Saving game...");
+                                saveGameData();
+                                break;
+                        }
+                    }
+                }
+
                 if(playerController.getPlayer().isInJail()) {
                     game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition())
                             .access(playerController.getPlayer());
                 }
 
-                boolean playerEndTurn = false;
-                boolean threwDice = false;
-                while(!playerController.getPlayer().isInJail() && !playerEndTurn){
+                if(!playerController.getPlayer().isInJail()){
+                    int diceResult = 0;
+                    if (playerController.getPlayer().getReleaseFromJailRoll() == 0) {
+                        // roll the dice
+                        System.out.println("Rolling dice...");
+                        FourSidedDice dice = new FourSidedDice();
+                        diceResult = dice.rollTwoDice();
+                        System.out.println("Rolling dice result: " + diceResult);
+                    } else {
+                        diceResult = playerController.getPlayer().getReleaseFromJailRoll();
+                        playerController.getPlayer().setReleaseFromJailRoll(0);
 
-                    playerEndTurn = true;
-
-                    if(!threwDice) {
-                        threwDice = true;
-                        int diceResult = 0;
-                        if (playerController.getPlayer().getReleaseFromJailRoll() == 0) {
-                            // roll the dice
-                            System.out.println("Rolling dice...");
-                            FourSidedDice dice = new FourSidedDice();
-                            diceResult = dice.rollTwoDice();
-                            System.out.println("Rolling dice result: " + diceResult);
-                        } else {
-                            diceResult = playerController.getPlayer().getReleaseFromJailRoll();
-                            playerController.getPlayer().setReleaseFromJailRoll(0);
-
-                        }
-                        // Save initial position of player before update
-                        int currentPos = playerController.getPlayer().getCurrGameBdPosition();
-
-                        // print the updated user position
-                        //game.getGameBoardController().getGameBoardView().displayGameBD();
-                        playerController.getPlayer().setCurrGameBdPosition(playerController.getPlayer().getCurrGameBdPosition()+diceResult);
-                        System.out.println("Current player position: " + playerController.getPlayer().getCurrGameBdPosition());
-
-                        // Save updated position
-                        int newPos = playerController.getPlayer().getCurrGameBdPosition();
-
-                        // Check whether player has passed GO
-                        if ((newPos - currentPos) < 0 && newPos != 1) {
-                            Square goSquare = game.getGameBoardController().getSquareByPosition(1);
-                            goSquare.access(playerController.getPlayer());
-                        }
-
-                        // start the Squares actions
-                        Square square = game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition());
-                        square.access(playerController.getPlayer());
                     }
+                    // Save initial position of player before update
+                    int currentPos = playerController.getPlayer().getCurrGameBdPosition();
+
+                    // print the updated user position
+                    //game.getGameBoardController().getGameBoardView().displayGameBD();
+                    playerController.getPlayer().setCurrGameBdPosition(playerController.getPlayer().getCurrGameBdPosition()+diceResult);
+                    System.out.println("Current player position: " + playerController.getPlayer().getCurrGameBdPosition());
+
+                    // Save updated position
+                    int newPos = playerController.getPlayer().getCurrGameBdPosition();
+
+                    // Check whether player has passed GO
+                    if ((newPos - currentPos) < 0 && newPos != 1) {
+                        Square goSquare = game.getGameBoardController().getSquareByPosition(1);
+                        goSquare.access(playerController.getPlayer());
+                    }
+
+                    // start the Squares actions
+                    Square square = game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition());
+                    square.access(playerController.getPlayer());
                 }
 
                 if(playerController.getPlayer().getBalance() > 0){
@@ -215,6 +250,14 @@ public class GameController {
             Player winner = game.playerList.peek().getPlayer();
             gameView.printWinners(winner);
         }
+
+    }
+
+    private void saveGameData() {
+
+    }
+
+    private void displayPlyerStatus() {
 
     }
 
