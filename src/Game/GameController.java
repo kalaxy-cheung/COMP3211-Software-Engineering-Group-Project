@@ -109,7 +109,7 @@ public class GameController {
             }
             else {
                 // Ensure the name is unique
-                while (playerNames.contains(inputName)) {
+                while (playerNames.contains(inputName) || inputName.isEmpty()) {
                     System.out.print("Name already taken. Please enter a different name: ");
                     inputName = scanner.nextLine().trim();
                 }
