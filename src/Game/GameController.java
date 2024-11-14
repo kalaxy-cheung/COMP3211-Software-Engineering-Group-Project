@@ -155,7 +155,7 @@ public class GameController {
                 while (!threwDice) {
 
                     // Display menu options for user input
-                    System.out.println("");
+                    System.out.println("\n********************************************");
                     System.out.println("1. Roll dice");
                     System.out.println("2. Query the next player");
                     System.out.println("3. Display player(s) status");
@@ -176,7 +176,7 @@ public class GameController {
                                 threwDice = true; // Assuming this indicates that dice have been rolled
                                 break;
                             case 2:
-                                System.out.println("The next player is " + this.game.playerList.peek().getPlayer().getName());
+                                System.out.println("\u001B[32mThe next player is " + this.game.playerList.peek().getPlayer().getName() + "\u001B[0m");
                                 break;
                             case 3:
                                 System.out.println("Displaying player(s) status...");
@@ -187,11 +187,14 @@ public class GameController {
                                 break;
                             case 5:
                                 System.out.println("Saving game...");
+                                game.playerList.add(playerController);
                                 saveGameData();
-                                break;
+                                return;
                         }
                     }
                 }
+
+                System.out.println("");
 
                 if(playerController.getPlayer().isInJail()) {
                     game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition())
@@ -258,7 +261,32 @@ public class GameController {
     }
 
     private void displayPlyerStatus() {
+        Scanner scanner = new Scanner(System.in); // Ensure you have a scanner instance
+        System.out.println("Enter the player name to view their status, or enter '*' to see all players' info:");
 
+        String input = scanner.nextLine(); // Read user input
+        boolean playerFound = true;
+
+        if (input.equals("*")) {
+            // Display all players' information
+            for(var player : game.playerList) {
+                player.getPlayerView().displayStatus(player.getPlayer());
+            }
+
+        } else {
+            // Display specific player's information
+            playerFound = false;
+            for(var player : game.playerList) {
+                if(player.getPlayer().getName().equals(input)){
+                    playerFound = true;
+                    player.getPlayerView().displayStatus(player.getPlayer());
+                }
+            }
+        }
+
+        if(!playerFound) {
+            System.out.println("\u001B[32mCannot find player: " + input + "\u001B[0m");
+        }
     }
 
     public void initPlayerPos(){
