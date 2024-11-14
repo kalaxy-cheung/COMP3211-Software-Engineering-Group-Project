@@ -6,9 +6,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        GameController gameController = new GameController();
 
         while (true) {
+            GameController gameController = new GameController();
             System.out.println("*****************************");
             System.out.println("Welcome to the Monopoly Game!");
             System.out.println("1. Start a new game");
@@ -28,7 +28,6 @@ public class Main {
                     break;
                 case 2:
                     // Resume a game
-                    gameController.setisNewGame(false);
                     System.out.println("Please input the game data file path");
                     String filePath = scanner.next();
                     gameController.loadGameData(filePath);

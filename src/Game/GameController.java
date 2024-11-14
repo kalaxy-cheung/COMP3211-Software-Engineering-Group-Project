@@ -60,17 +60,19 @@ public class GameController {
             }
         }
 
+        String filePath = ""; // default game board
+
         if(function == 2) {
             // start a new game with a custom game board
-            int res = -1;
-            while(res != 0) {
-                System.out.println("Please enter custom game board file path");
-                String filePath = scanner.next();
-                res = this.game.getGameBoardController().loadGameBd(filePath);
-                if(res != 0) {
-                    System.out.printf("Load custom game board fail! %s%n", this.game.getGameBoardController().errorMsg);
-                }
-            }
+            System.out.println("Please enter custom game board file path");
+            filePath = scanner.next();
+        }
+
+        int res = -1;
+        res = this.game.getGameBoardController().loadGameBd(filePath);
+        if(res != 0) {
+            System.out.printf("Load custom game board fail! %s%n", this.game.getGameBoardController().errorMsg);
+
         }
     }
 
@@ -122,12 +124,27 @@ public class GameController {
     *   game logic
     */
     public void startGame() {
+
         //The system shall place all player tokens on the "Go" square at the start of the game.
-        if(isNewGame) initPlayerPos();
+        if(isNewGame) {
+            System.out.println("********************************************");
+            System.out.println("Game Start!");
+            initPlayerPos();
+            for (var player: this.game.playerList) {
+                player.getPlayer().setBalance(1500); // The system shall assign each player an initial amount of HKD 1500.
+            }
+        }
+        else  {
+            System.out.println("********************************************");
+            System.out.println("Game Resume!");
+        }
 
         //The system shall end the game when only one player remains or after 100 rounds.
         while(game.currRound <= Game.MAX_ROUNDS && game.playerList.size()>1) {
             for (int i=0; i<game.playerList.size(); i++){
+
+                System.out.println("********************************************");
+                System.out.printf("Round %d: %s's turn.\n", game.currRound, game.playerList.peek().getPlayer().getName());
                 // game.getGameBoardController().getGameBoardView().displayGameBD();
                 gameView.printAllPlayerPosition(game.playerList);
 
@@ -292,6 +309,7 @@ public class GameController {
             e.printStackTrace();
             return -1;
         }
+        this.isNewGame = false;
         return 0; // Success
     }
 
@@ -318,10 +336,6 @@ public class GameController {
 
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
-    }
-
-    public void setisNewGame(boolean newGame) {
-        isNewGame = newGame;
     }
 }
 

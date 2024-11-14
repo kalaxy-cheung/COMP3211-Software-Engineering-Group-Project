@@ -34,7 +34,7 @@ public class GameBoardController {
         if(filePath.isEmpty() || !fXmlFile.exists())
         {
             //Default game board for initialization
-            fXmlFile = new File(System.getProperty("user.dir") + "defaultGameBoard.xml");
+            fXmlFile = new File(System.getProperty("user.dir") + "/defaultGameBoard.xml");
         }
 
         System.out.println("Loading game board from " + filePath + "...");
@@ -125,8 +125,8 @@ public class GameBoardController {
                         throw new IllegalArgumentException(position + " has an unknown square type: " + squareType);
                 }
             }
-
         }catch (Exception e) {
+            this.errorMsg = e.getMessage();
             return -1;
         }
 
