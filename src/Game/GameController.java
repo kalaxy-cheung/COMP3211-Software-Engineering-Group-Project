@@ -290,7 +290,7 @@ public class GameController {
                         int turnsInJail = Integer.parseInt(getTagValue("TurnsInJail", playerElement));
 
                         // Print player information
-                        System.out.println("\nPlayer " + (i + 1) + ":");
+                        System.out.println("\u001B[32m\nPlayer " + (i + 1) + ":\u001B[0m");
                         System.out.println("Name: " + name);
                         System.out.println("Balance: " + balance);
                         System.out.println("Current Game Board Position: " + currGameBdPosition);

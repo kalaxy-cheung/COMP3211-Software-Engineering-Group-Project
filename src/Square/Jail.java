@@ -45,13 +45,13 @@ public class Jail extends Square {
 
         // Case 2: Player chooses to pay the fine before third turn
         if (player.getTurnsInJail() < 3) {
-            System.out.println("Do you wish to pay the fine of 150? (Y/N)");
+            System.out.print("Do you wish to pay the fine of 150? (Y/N): ");
             Scanner scanner = new Scanner(System.in);
-            String response = scanner.nextLine();
+            String response = scanner.nextLine().toUpperCase();
 
             while (!response.equals("Y") && !response.equals("N")) {
                 System.out.println("Invalid input! Please try again.");
-                response = scanner.nextLine();
+                response = scanner.nextLine().toUpperCase();
             }
 
             if (response.equals("Y")) {

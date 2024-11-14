@@ -10,6 +10,7 @@ public class FreeParking extends Square{
     }
     @Override
     public void access(Player player) {
+        System.out.println("\u001B[36mYou landed on FreeParking!\u001B[0m");
 
     }
 }

@@ -10,7 +10,7 @@ public class Go extends Square{
 
     @Override
     public void access(Player player) {
-        System.out.println("You landed/passed Go. You receive 1500!");
+        System.out.println("\u001B[36mYou landed/passed Go. You receive 1500!\u001B[0m");
         player.setBalance(player.getBalance() + 1500); // Add amount to players' balance
 
     }
