@@ -1,4 +1,14 @@
 package GameBoard;
+import Square.*;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
+import java.io.File;
+
 
 public class GameBoardController {
     private GameBoard gameBoard;
@@ -8,23 +18,120 @@ public class GameBoardController {
     public GameBoardController() {
         this.gameBoard = new GameBoard();
         this.gameBoardView = new GameBoardView();
-        //TODO
-        //1. create default game board for initialization
+    }
+
+    public Square getSquareByPosition(int position) {
+        return this.gameBoard.getSquareList().get(position - 1);
     }
 
     /*
     *
-    * Building a custom game board using a json file
+    * Building a game board using a xml file
     *
     */
-    public int loadCustomGameBd(String filePath) {
-        System.out.println("Loading custom game bd...");
-        //TODO
-        this.errorMsg = "Invalid file path!";
+    public int loadGameBd(String filePath) {
+        File fXmlFile = new File(filePath);
+        if(filePath.isEmpty() || !fXmlFile.exists())
+        {
+            //Default game board for initialization
+            fXmlFile = new File(System.getProperty("user.dir") + "defaultGameBoard.xml");
+        }
+
+        System.out.println("Loading game board from " + filePath + "...");
+        boolean startInitialized = false;
+
+        try{
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(fXmlFile);
+            doc.getDocumentElement().normalize();
+
+            // Load Game Board Squares
+            NodeList squareList = doc.getElementsByTagName("squares");
+            if(squareList.getLength() != 20) {
+                System.err.println("Error: the number of squares should be 20!");
+                throw new IllegalArgumentException("Error: the number of squares should be 20!");
+            }
+
+            for (int i = 0; i < squareList.getLength(); i++) {
+                Node squareNode = squareList.item(i);
+                Element eElement = (Element) squareNode;
+
+                String squareType = eElement.getAttribute("type");
+                if (squareType == null || squareType.isEmpty()) {
+                    // Log an error message or throw an exception
+                    System.err.println("Error: 'type' attribute not found for square node at position: " +
+                            eElement.getAttribute("position"));
+                    throw new IllegalArgumentException("Missing 'type' attribute in square node.");
+                }
+
+                String position = eElement.getAttribute("position");
+                switch (squareType) {
+                    case "Property":
+                        System.out.println(position + " created Property square.");
+                        // Add logic for handling Property
+                        String name = eElement.getElementsByTagName("name").item(0).getTextContent();
+                        String price = eElement.getElementsByTagName("price").item(0).getTextContent();
+                        String rent = eElement.getElementsByTagName("rent").item(0).getTextContent();
+                        String owner = eElement.getElementsByTagName("owner").item(0).getTextContent();
+                        Property property = new Property(name, Integer.parseInt(price), Integer.parseInt(rent));
+                        this.gameBoard.getSquareList().add(property);
+                        break;
+
+                    case "IncomeTax":
+                        System.out.println(position + " created Income Tax square.");
+                        // Add logic for handling Income Tax
+                        this.gameBoard.getSquareList().add(new IncomeTax());
+                        break;
+
+                    case "Jail":
+                        System.out.println(position + " created Jail square.");
+                        // Add logic for handling Jail
+                        this.gameBoard.getSquareList().add(new Jail());
+                        break;
+
+                    case "Chance":
+                        System.out.println(position + " created Chance square.");
+                        // Add logic for handling Chance
+                        this.gameBoard.getSquareList().add(new Chance());
+                        break;
+
+                    case "FreeParking":
+                        System.out.println(position + " created Free Parking square.");
+                        // Add logic for handling Free Parking
+                        this.gameBoard.getSquareList().add(new FreeParking());
+                        break;
+
+                    case "GoJail":
+                        System.out.println(position + " created Go Jail square.");
+                        // Add logic for handling Go Jail
+                        this.gameBoard.getSquareList().add(new GoJail());
+                        break;
+
+                    case "Go":
+                        if (startInitialized) {
+                            System.err.println(position + " start position duplicated!");
+                            throw new IllegalArgumentException(position + " start position duplicated!");
+                        }
+                        System.out.println(position + " created Go square.");
+                        // Add logic for handling Go
+                        this.gameBoard.getSquareList().add(new Go());
+                        this.gameBoard.setStartSquareIndex(Integer.parseInt(position));
+                        startInitialized = true;
+                        break;
+
+                    default:
+                        System.err.println(position + " has an unknown square type: " + squareType);
+                        throw new IllegalArgumentException(position + " has an unknown square type: " + squareType);
+                }
+            }
+
+        }catch (Exception e) {
+            return -1;
+        }
 
         return 0;
     }
-
 
     public GameBoard getGameBoard() {
         return gameBoard;
@@ -41,5 +148,6 @@ public class GameBoardController {
     public void setGameBoardView(GameBoardView gameBoardView) {
         this.gameBoardView = gameBoardView;
     }
+
 }
 

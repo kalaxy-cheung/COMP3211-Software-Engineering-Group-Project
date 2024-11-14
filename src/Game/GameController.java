@@ -1,21 +1,32 @@
 package Game;
 
+import Dice.FourSidedDice;
 import GameBoard.GameBoardController;
+import Player.Player;
 import Player.PlayerController;
+import Square.Square;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.util.*;
+
+
 
 public class GameController {
     private Game game;
     private GameView gameView;
+    private boolean isNewGame;
 
     public GameController() {
         this.game = new Game();
         this.gameView = new GameView();
         this.game.setGameBoard(new GameBoardController());
+        this.isNewGame = true;
     }
 
     private String generateRandomName() {
@@ -55,9 +66,9 @@ public class GameController {
             while(res != 0) {
                 System.out.println("Please enter custom game board file path");
                 String filePath = scanner.next();
-                res = this.game.getGameBoard().loadCustomGameBd(filePath);
+                res = this.game.getGameBoardController().loadGameBd(filePath);
                 if(res != 0) {
-                    System.out.printf("Load custom game board fail! %s%n", this.game.getGameBoard().errorMsg);
+                    System.out.printf("Load custom game board fail! %s%n", this.game.getGameBoardController().errorMsg);
                 }
             }
         }
@@ -79,6 +90,7 @@ public class GameController {
                 System.out.println("Invalid number of players. Please try again.");
             }
         }
+
         System.out.println("Number of players set to: " + numPlayers);
 
         Set<String> playerNames = new HashSet<>();
@@ -111,19 +123,186 @@ public class GameController {
     */
     public void startGame() {
         //The system shall place all player tokens on the "Go" square at the start of the game.
+        if(isNewGame) initPlayerPos();
 
+        //The system shall end the game when only one player remains or after 100 rounds.
+        while(game.currRound <= Game.MAX_ROUNDS && game.playerList.size()>1) {
+            for (int i=0; i<game.playerList.size(); i++){
+                // game.getGameBoardController().getGameBoardView().displayGameBD();
+                gameView.printAllPlayerPosition(game.playerList);
 
+                PlayerController playerController = game.playerList.poll();
+
+                if(playerController.getPlayer().isInJail()) {
+                    game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition())
+                            .access(playerController.getPlayer());
+                }
+
+                if(!playerController.getPlayer().isInJail()){
+                    int diceResult = 0;
+                    if (playerController.getPlayer().getReleaseFromJailRoll() == 0) {
+                        // roll the dice
+                        System.out.println("Rolling dice...");
+                        FourSidedDice dice = new FourSidedDice();
+                         diceResult = dice.rollTwoDice();
+                        System.out.println("Rolling dice result: " + diceResult);
+                    } else {
+                        diceResult = playerController.getPlayer().getReleaseFromJailRoll();
+                        playerController.getPlayer().setReleaseFromJailRoll(0);
+
+                    }
+                    // Save initial position of player before update
+                    int currentPos = playerController.getPlayer().getCurrGameBdPosition();
+
+                    // print the updated user position
+                    game.getGameBoardController().getGameBoardView().displayGameBD();
+                    playerController.getPlayer().setCurrGameBdPosition(playerController.getPlayer().getCurrGameBdPosition()+diceResult);
+                    playerController.getPlayerView().printPlayerPosition(playerController.getPlayer());
+
+                    // Save updated position
+                    int newPos = playerController.getPlayer().getCurrGameBdPosition();
+
+                    // Check whether player has passed GO
+                    if ((newPos - currentPos) < 0 && newPos != 1) {
+                        Square goSquare = game.getGameBoardController().getSquareByPosition(1);
+                        goSquare.access(playerController.getPlayer());
+                    }
+
+                    // start the Squares actions
+                    Square square = game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition());
+                    square.access(playerController.getPlayer());
+                }
+
+                if(playerController.getPlayer().getBalance() > 0){
+                    game.playerList.add(playerController);
+                }
+            }
+
+            game.currRound++;
+        }
+
+        if(game.playerList.size() > 1){
+            List<Player> winners = getRichestPlayers();
+            gameView.printWinners(winners);
+        }
+        else {
+            assert game.playerList.peek() != null;
+            Player winner = game.playerList.peek().getPlayer();
+            gameView.printWinners(winner);
+        }
+
+    }
+
+    public void initPlayerPos(){
+        for(var player : game.playerList) {
+            player.getPlayer().setCurrGameBdPosition(game.getGameBoardController().getGameBoard().getStartSquareIndex());
+        }
+    }
+
+    public List<Player> getRichestPlayers(){
+        List<Player> res = new ArrayList<Player>();
+        int largest = Integer.MIN_VALUE;
+        for(var player : game.playerList) {
+            if(player.getPlayer().getBalance() > largest) {
+                largest = player.getPlayer().getBalance();
+            }
+        }
+
+        for(var player : game.playerList) {
+            if(player.getPlayer().getBalance() == largest) {
+                res.add(player.getPlayer());
+            }
+        }
+
+        return  res;
     }
 
     /*
     *   load the game data by a json file for resuming a previous game
     */
-    public void loadGameData(String filePath) {
+    public int loadGameData(String filePath) {
         System.out.printf("Loading the game from %s%n", filePath);
-        //TODO
 
+        this.game.getGameBoardController().loadGameBd(filePath);
+
+        System.out.print("\nReading Players....\n");
+        try {
+            File xmlFile = new File(filePath);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(xmlFile);
+
+            doc.getDocumentElement().normalize();
+
+            NodeList playerNodes = doc.getElementsByTagName("Player");
+
+            if (playerNodes.getLength() > 0) {
+                // Iterate through all Player nodes
+                for (int i = 0; i < playerNodes.getLength(); i++) {
+                    Node playerNode = playerNodes.item(i);
+
+                    if (playerNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element playerElement = (Element) playerNode;
+
+                        String name = getTagValue("Name", playerElement);
+                        String balanceStr = getTagValue("Balance", playerElement);
+
+                        if (name == null || name.isEmpty()) {
+                            System.err.println("Error: Missing or empty player name for player at index " + i);
+                            return -1;
+                        }
+
+                        int balance;
+                        try {
+                            balance = Integer.parseInt(balanceStr);
+                        } catch (NumberFormatException e) {
+                            System.err.println("Error: Invalid balance value for player at index " + i + ". Must be an integer.");
+                            return -1;
+                        }
+
+                        int currGameBdPosition = Integer.parseInt(getTagValue("CurrentGameBoardPosition", playerElement));
+                        boolean inJail = Boolean.parseBoolean(getTagValue("InJail", playerElement));
+                        int turnsInJail = Integer.parseInt(getTagValue("TurnsInJail", playerElement));
+
+                        // Print player information
+                        System.out.println("\nPlayer " + (i + 1) + ":");
+                        System.out.println("Name: " + name);
+                        System.out.println("Balance: " + balance);
+                        System.out.println("Current Game Board Position: " + currGameBdPosition);
+                        System.out.println("In Jail: " + inJail);
+                        System.out.println("Turns in Jail: " + turnsInJail);
+
+                        // Create player object
+                        Player player = new Player(name);
+                        player.setBalance(balance);
+                        player.setCurrGameBdPosition(currGameBdPosition);
+                        player.setInJail(inJail);
+                        player.setTurnsInJail(turnsInJail);
+
+                        game.playerList.add(new PlayerController(player));
+
+
+                    }
+                }
+            } else {
+                System.err.println("No player nodes found in the XML.");
+                return -1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+        return 0; // Success
     }
 
+    private String getTagValue(String tagName, Element element) {
+        NodeList nodeList = element.getElementsByTagName(tagName);
+        if (nodeList != null && nodeList.getLength() > 0) {
+            Node node = nodeList.item(0);
+            return node.getTextContent();
+        }
+        return null;
+    }
 
     public Game getGame() {
         return game;
@@ -140,4 +319,11 @@ public class GameController {
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
     }
+
+    public void setisNewGame(boolean newGame) {
+        isNewGame = newGame;
+    }
 }
+
+
+
