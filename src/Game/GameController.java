@@ -4,7 +4,7 @@ import Dice.FourSidedDice;
 import GameBoard.GameBoardController;
 import Player.Player;
 import Player.PlayerController;
-import Square.Square;
+import Square.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,6 +12,11 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.*;
 
@@ -119,6 +124,18 @@ public class GameController {
             addNewPlayer(inputName);
         }
     }
+
+    private String getSquareType(Square square) {
+        if (square instanceof Property) return "Property";
+        if (square instanceof IncomeTax) return "IncomeTax";
+        if (square instanceof Jail) return "Jail";
+        if (square instanceof Chance) return "Chance";
+        if (square instanceof FreeParking) return "FreeParking";
+        if (square instanceof GoJail) return "GoJail";
+        if (square instanceof Go) return "Go";
+        return "Unknown"; // Fallback for unknown square types
+    }
+
 
     /*
     *   game logic
@@ -253,9 +270,110 @@ public class GameController {
 
     }
 
-    private void saveGameData() {
+    public int saveGameData() {
+        // Define the file path within the project directory
+        String filePath = System.getProperty("user.dir") + "\\savedGameData.xml";
 
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.newDocument();
+
+            // Root element
+            Element rootElement = doc.createElement("root");
+            doc.appendChild(rootElement);
+
+            // MonopolyGame element
+            Element monopolyGameElement = doc.createElement("MonopolyGame");
+            rootElement.appendChild(monopolyGameElement);
+
+            // PlayerList element
+            Element playerListElement = doc.createElement("PlayerList");
+            monopolyGameElement.appendChild(playerListElement);
+
+            // Save Player data
+            for (PlayerController playerController : game.playerList) {
+                Player player = playerController.getPlayer();
+
+                Element playerElement = doc.createElement("Player");
+
+                Element nameElement = doc.createElement("Name");
+                nameElement.appendChild(doc.createTextNode(player.getName()));
+                playerElement.appendChild(nameElement);
+
+                Element balanceElement = doc.createElement("Balance");
+                balanceElement.appendChild(doc.createTextNode(String.valueOf(player.getBalance())));
+                playerElement.appendChild(balanceElement);
+
+                Element currGameBdPositionElement = doc.createElement("CurrentGameBoardPosition");
+                currGameBdPositionElement.appendChild(doc.createTextNode(String.valueOf(player.getCurrGameBdPosition())));
+                playerElement.appendChild(currGameBdPositionElement);
+
+                Element inJailElement = doc.createElement("InJail");
+                inJailElement.appendChild(doc.createTextNode(String.valueOf(player.isInJail())));
+                playerElement.appendChild(inJailElement);
+
+                Element turnsInJailElement = doc.createElement("TurnsInJail");
+                turnsInJailElement.appendChild(doc.createTextNode(String.valueOf(player.getTurnsInJail())));
+                playerElement.appendChild(turnsInJailElement);
+
+                playerListElement.appendChild(playerElement);
+            }
+
+            // GameBoard element
+            Element gameBoardElement = doc.createElement("GameBoard");
+            monopolyGameElement.appendChild(gameBoardElement);
+
+            // Save Game Board Squares
+            for (int i = 0; i < game.getGameBoardController().getGameBoard().getSquareList().size(); i++) {
+                Square square = game.getGameBoardController().getGameBoard().getSquareList().get(i);
+
+                Element squareElement = doc.createElement("squares");
+                squareElement.setAttribute("position", String.valueOf(i + 1)); // Convert position to String
+                squareElement.setAttribute("type", getSquareType(square)); // Convert type to String based on guide
+
+                if (square instanceof Property) {
+                    Property property = (Property) square;
+
+                    Element nameElement = doc.createElement("name");
+                    nameElement.appendChild(doc.createTextNode(property.getName()));
+                    squareElement.appendChild(nameElement);
+
+                    Element priceElement = doc.createElement("price");
+                    priceElement.appendChild(doc.createTextNode(String.valueOf(property.getPrice())));
+                    squareElement.appendChild(priceElement);
+
+                    Element rentElement = doc.createElement("rent");
+                    rentElement.appendChild(doc.createTextNode(String.valueOf(property.getRent())));
+                    squareElement.appendChild(rentElement);
+
+                    Element ownerElement = doc.createElement("owner");
+                    ownerElement.appendChild(doc.createTextNode(property.getOwner() != null ? property.getOwner() : ""));
+                    squareElement.appendChild(ownerElement);
+                }
+
+                gameBoardElement.appendChild(squareElement);
+            }
+
+            // Write the XML file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(filePath));
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(source, result);
+
+            System.out.println("\u001B[32mGame data saved successfully at: " + filePath + "\u001B[0m");
+            return 0; // Success
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1; // Failure
+        }
     }
+
+
+
+
 
     private void displayPlyerStatus() {
 
