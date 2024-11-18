@@ -1,4 +1,6 @@
 import Game.GameController;
+import GameBoard.GameBoardSaver;
+
 import java.io.File;
 import Player.Player;
 import java.util.Scanner;
@@ -40,7 +42,8 @@ public class Main {
                             // Error checking for file existence and loading game data
                             File file = new File(filePath);
                             if (!file.exists() || !file.isFile()) {
-                                System.out.println("\u001B[31mError: The specified file does not exist or is not a valid file. Please try again.\u001B[0m\n");
+                                System.out.println(
+                                        "\u001B[31mError: The specified file does not exist or is not a valid file. Please try again.\u001B[0m\n");
                                 continue; // Retry the loop
                             }
 
@@ -57,6 +60,8 @@ public class Main {
 
                     case 3:
                         // Design game board
+                        String xmlFileName = "defaultGameBoard.xml"; // Specify your XML file here
+                        GameBoardSaver.updateGameBoard(xmlFileName);
                         break;
                     case 4:
                         // Quit
