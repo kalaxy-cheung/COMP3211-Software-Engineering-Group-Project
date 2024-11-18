@@ -29,7 +29,7 @@ public class GameView {
     }
 
     public void printAllPlayerPosition(Queue<PlayerController> playerList) {
-        System.out.println("\nPlayer position:");
+        System.out.println("\nPlayers' position:");
         for (var player : playerList) {
             player.getPlayerView().printPlayerPosition(player.getPlayer());
         }

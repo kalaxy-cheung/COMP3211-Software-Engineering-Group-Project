@@ -4,7 +4,7 @@ import Dice.FourSidedDice;
 import GameBoard.GameBoardController;
 import Player.Player;
 import Player.PlayerController;
-import Square.Square;
+import Square.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,6 +12,11 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.*;
 
@@ -60,17 +65,19 @@ public class GameController {
             }
         }
 
+        String filePath = ""; // default game board
+
         if(function == 2) {
             // start a new game with a custom game board
-            int res = -1;
-            while(res != 0) {
-                System.out.println("Please enter custom game board file path");
-                String filePath = scanner.next();
-                res = this.game.getGameBoardController().loadGameBd(filePath);
-                if(res != 0) {
-                    System.out.printf("Load custom game board fail! %s%n", this.game.getGameBoardController().errorMsg);
-                }
-            }
+            System.out.println("Please enter custom game board file path");
+            filePath = scanner.next();
+        }
+
+        int res = -1;
+        res = this.game.getGameBoardController().loadGameBd(filePath);
+        if(res != 0) {
+            System.out.printf("Load custom game board fail! %s%n", this.game.getGameBoardController().errorMsg);
+
         }
     }
 
@@ -107,7 +114,7 @@ public class GameController {
             }
             else {
                 // Ensure the name is unique
-                while (playerNames.contains(inputName)) {
+                while (playerNames.contains(inputName) || inputName.isEmpty()) {
                     System.out.print("Name already taken. Please enter a different name: ");
                     inputName = scanner.nextLine().trim();
                 }
@@ -118,20 +125,93 @@ public class GameController {
         }
     }
 
+    private String getSquareType(Square square) {
+        if (square instanceof Property) return "Property";
+        if (square instanceof IncomeTax) return "IncomeTax";
+        if (square instanceof Jail) return "Jail";
+        if (square instanceof Chance) return "Chance";
+        if (square instanceof FreeParking) return "FreeParking";
+        if (square instanceof GoJail) return "GoJail";
+        if (square instanceof Go) return "Go";
+        return "Unknown"; // Fallback for unknown square types
+    }
+
+
     /*
     *   game logic
     */
     public void startGame() {
+        Scanner scanner = new Scanner(System.in);
+
         //The system shall place all player tokens on the "Go" square at the start of the game.
-        if(isNewGame) initPlayerPos();
+        if(isNewGame) {
+            System.out.println("********************************************");
+            System.out.println("Game Start!");
+            initPlayerPos();
+            for (var player: this.game.playerList) {
+                player.getPlayer().setBalance(1500); // The system shall assign each player an initial amount of HKD 1500.
+            }
+        }
+        else  {
+            System.out.println("********************************************");
+            System.out.println("Game Resume!");
+        }
 
         //The system shall end the game when only one player remains or after 100 rounds.
         while(game.currRound <= Game.MAX_ROUNDS && game.playerList.size()>1) {
             for (int i=0; i<game.playerList.size(); i++){
-                // game.getGameBoardController().getGameBoardView().displayGameBD();
+
+                System.out.println("********************************************");
+                System.out.printf("Round %d: %s's turn.\n", game.currRound, game.playerList.peek().getPlayer().getName());
+                game.getGameBoardController().getGameBoardView().displayGameBD();
                 gameView.printAllPlayerPosition(game.playerList);
 
                 PlayerController playerController = game.playerList.poll();
+
+                boolean threwDice = false;
+                while (!threwDice) {
+
+                    // Display menu options for user input
+                    System.out.println("\n********************************************");
+                    System.out.println("1. Roll dice");
+                    System.out.println("2. Query the next player");
+                    System.out.println("3. Display player(s) status");
+                    System.out.println("4. Display game board");
+                    System.out.println("5. Save game");
+                    System.out.print("Please enter your choice (1-5): ");
+
+                    // Read user input
+                    int function = scanner.nextInt();
+
+                    // Validate user input
+                    if (function < 1 || function > 5) {
+                        System.out.println("Invalid command! Please enter a number between 1 and 5.");
+                    } else {
+                        // Handle valid commands
+                        switch (function) {
+                            case 1:
+                                threwDice = true; // Assuming this indicates that dice have been rolled
+                                break;
+                            case 2:
+                                System.out.println("\u001B[32mThe next player is " + this.game.playerList.peek().getPlayer().getName() + "\u001B[0m");
+                                break;
+                            case 3:
+                                System.out.println("Displaying player(s) status...");
+                                displayPlyerStatus();
+                                break;
+                            case 4:
+                                game.getGameBoardController().getGameBoardView().displayGameBD();
+                                break;
+                            case 5:
+                                System.out.println("Saving game...");
+                                game.playerList.add(playerController);
+                                saveGameData();
+                                return;
+                        }
+                    }
+                }
+
+                System.out.println("");
 
                 if(playerController.getPlayer().isInJail()) {
                     game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition())
@@ -144,7 +224,7 @@ public class GameController {
                         // roll the dice
                         System.out.println("Rolling dice...");
                         FourSidedDice dice = new FourSidedDice();
-                         diceResult = dice.rollTwoDice();
+                        diceResult = dice.rollTwoDice();
                         System.out.println("Rolling dice result: " + diceResult);
                     } else {
                         diceResult = playerController.getPlayer().getReleaseFromJailRoll();
@@ -155,9 +235,9 @@ public class GameController {
                     int currentPos = playerController.getPlayer().getCurrGameBdPosition();
 
                     // print the updated user position
-                    game.getGameBoardController().getGameBoardView().displayGameBD();
+                    //game.getGameBoardController().getGameBoardView().displayGameBD();
                     playerController.getPlayer().setCurrGameBdPosition(playerController.getPlayer().getCurrGameBdPosition()+diceResult);
-                    playerController.getPlayerView().printPlayerPosition(playerController.getPlayer());
+                    System.out.println("Current player position: " + playerController.getPlayer().getCurrGameBdPosition());
 
                     // Save updated position
                     int newPos = playerController.getPlayer().getCurrGameBdPosition();
@@ -191,6 +271,140 @@ public class GameController {
             gameView.printWinners(winner);
         }
 
+    }
+
+    public int saveGameData() {
+        // Define the file path within the project directory
+        String filePath = System.getProperty("user.dir") + "\\savedGameData.xml";
+
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.newDocument();
+
+            // Root element
+            Element rootElement = doc.createElement("root");
+            doc.appendChild(rootElement);
+
+            // MonopolyGame element
+            Element monopolyGameElement = doc.createElement("MonopolyGame");
+            rootElement.appendChild(monopolyGameElement);
+
+            // PlayerList element
+            Element playerListElement = doc.createElement("PlayerList");
+            monopolyGameElement.appendChild(playerListElement);
+
+            // Save Player data
+            for (PlayerController playerController : game.playerList) {
+                Player player = playerController.getPlayer();
+
+                Element playerElement = doc.createElement("Player");
+
+                Element nameElement = doc.createElement("Name");
+                nameElement.appendChild(doc.createTextNode(player.getName()));
+                playerElement.appendChild(nameElement);
+
+                Element balanceElement = doc.createElement("Balance");
+                balanceElement.appendChild(doc.createTextNode(String.valueOf(player.getBalance())));
+                playerElement.appendChild(balanceElement);
+
+                Element currGameBdPositionElement = doc.createElement("CurrentGameBoardPosition");
+                currGameBdPositionElement.appendChild(doc.createTextNode(String.valueOf(player.getCurrGameBdPosition())));
+                playerElement.appendChild(currGameBdPositionElement);
+
+                Element inJailElement = doc.createElement("InJail");
+                inJailElement.appendChild(doc.createTextNode(String.valueOf(player.isInJail())));
+                playerElement.appendChild(inJailElement);
+
+                Element turnsInJailElement = doc.createElement("TurnsInJail");
+                turnsInJailElement.appendChild(doc.createTextNode(String.valueOf(player.getTurnsInJail())));
+                playerElement.appendChild(turnsInJailElement);
+
+                playerListElement.appendChild(playerElement);
+            }
+
+            // GameBoard element
+            Element gameBoardElement = doc.createElement("GameBoard");
+            monopolyGameElement.appendChild(gameBoardElement);
+
+            // Save Game Board Squares
+            for (int i = 0; i < game.getGameBoardController().getGameBoard().getSquareList().size(); i++) {
+                Square square = game.getGameBoardController().getGameBoard().getSquareList().get(i);
+
+                Element squareElement = doc.createElement("squares");
+                squareElement.setAttribute("position", String.valueOf(i + 1)); // Convert position to String
+                squareElement.setAttribute("type", getSquareType(square)); // Convert type to String based on guide
+
+                if (square instanceof Property) {
+                    Property property = (Property) square;
+
+                    Element nameElement = doc.createElement("name");
+                    nameElement.appendChild(doc.createTextNode(property.getName()));
+                    squareElement.appendChild(nameElement);
+
+                    Element priceElement = doc.createElement("price");
+                    priceElement.appendChild(doc.createTextNode(String.valueOf(property.getPrice())));
+                    squareElement.appendChild(priceElement);
+
+                    Element rentElement = doc.createElement("rent");
+                    rentElement.appendChild(doc.createTextNode(String.valueOf(property.getRent())));
+                    squareElement.appendChild(rentElement);
+
+                    Element ownerElement = doc.createElement("owner");
+                    ownerElement.appendChild(doc.createTextNode(property.getOwner() != null ? property.getOwner() : ""));
+                    squareElement.appendChild(ownerElement);
+                }
+
+                gameBoardElement.appendChild(squareElement);
+            }
+
+            // Write the XML file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(filePath));
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(source, result);
+
+            System.out.println("\u001B[32mGame data saved successfully at: " + filePath + "\u001B[0m");
+            return 0; // Success
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1; // Failure
+        }
+    }
+
+
+
+
+
+    private void displayPlyerStatus() {
+        Scanner scanner = new Scanner(System.in); // Ensure you have a scanner instance
+        System.out.println("Enter the player name to view their status, or enter '*' to see all players' info:");
+
+        String input = scanner.nextLine(); // Read user input
+        boolean playerFound = true;
+
+        if (input.equals("*")) {
+            // Display all players' information
+            for(var player : game.playerList) {
+                player.getPlayerView().displayStatus(player.getPlayer());
+            }
+
+        } else {
+            // Display specific player's information
+            playerFound = false;
+            for(var player : game.playerList) {
+                if(player.getPlayer().getName().equals(input)){
+                    playerFound = true;
+                    player.getPlayerView().displayStatus(player.getPlayer());
+                }
+            }
+        }
+
+        if(!playerFound) {
+            System.out.println("\u001B[32mCannot find player: " + input + "\u001B[0m");
+        }
     }
 
     public void initPlayerPos(){
@@ -265,7 +479,7 @@ public class GameController {
                         int turnsInJail = Integer.parseInt(getTagValue("TurnsInJail", playerElement));
 
                         // Print player information
-                        System.out.println("\nPlayer " + (i + 1) + ":");
+                        System.out.println("\u001B[32m\nPlayer " + (i + 1) + ":\u001B[0m");
                         System.out.println("Name: " + name);
                         System.out.println("Balance: " + balance);
                         System.out.println("Current Game Board Position: " + currGameBdPosition);
@@ -292,6 +506,7 @@ public class GameController {
             e.printStackTrace();
             return -1;
         }
+        this.isNewGame = false;
         return 0; // Success
     }
 
@@ -318,10 +533,6 @@ public class GameController {
 
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
-    }
-
-    public void setisNewGame(boolean newGame) {
-        isNewGame = newGame;
     }
 }
 
