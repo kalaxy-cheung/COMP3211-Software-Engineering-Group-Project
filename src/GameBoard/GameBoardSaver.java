@@ -40,7 +40,8 @@ public class GameBoardSaver {
                 System.out.println("Choose an option:");
                 System.out.println("1. Update square rent");
                 System.out.println("2. Update square position");
-                System.out.println("3. Exit");
+                System.out.println("3. Update square name and price");
+                System.out.println("4. Exit");
 
                 int choice = scanner.nextInt();
                 switch (choice) {
@@ -61,6 +62,17 @@ public class GameBoardSaver {
                         break;
 
                     case 3:
+                        System.out.print("Enter the position of the square to update: ");
+                        int positionToUpdate = scanner.nextInt();
+                        System.out.print("Enter the new name for the square: ");
+                        scanner.nextLine(); // Consume the newline
+                        String newName = scanner.nextLine();
+                        System.out.print("Enter the new price for the square: ");
+                        int newPrice = scanner.nextInt();
+                        updateSquareNameAndPrice(doc, positionToUpdate, newName, newPrice);
+                        break;
+
+                    case 4:
                         System.out.println("Exiting the updater.");
                         continueUpdating = "no"; // Exit the loop
                         continue;
@@ -114,6 +126,24 @@ public class GameBoardSaver {
         }
         if (!found) {
             System.out.println("Old position " + oldPosition + " not found.");
+        }
+    }
+
+    public static void updateSquareNameAndPrice(Document doc, int position, String newName, int newPrice) {
+        NodeList squares = doc.getElementsByTagName("squares");
+        boolean found = false;
+        for (int i = 0; i < squares.getLength(); i++) {
+            Element square = (Element) squares.item(i);
+            if (Integer.parseInt(square.getAttribute("position")) == position) {
+                square.getElementsByTagName("name").item(0).setTextContent(newName);
+                square.getElementsByTagName("price").item(0).setTextContent(String.valueOf(newPrice));
+                System.out.println("Updated square at position " + position + " to name: " + newName + " and price: " + newPrice);
+                found = true;
+                break; // Exit loop after updating
+            }
+        }
+        if (!found) {
+            System.out.println("Position " + position + " not found.");
         }
     }
 
