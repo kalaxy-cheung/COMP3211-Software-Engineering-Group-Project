@@ -1,7 +1,5 @@
 package GameBoard;
 
-import Player.Player;
-import Player.PlayerController;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -10,11 +8,9 @@ import org.w3c.dom.NodeList;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
 
 public class GameBoardView {
     private static final int SIZE = 6; // Size of the grid
-    private static final String XML_FILE_PATH = "gameboard.xml"; 
 
     private static final Map<String, String> SPECIAL_SQUARE_TYPES = new HashMap<>();
 
@@ -28,11 +24,24 @@ public class GameBoardView {
     }
 
     public static void main(String[] args) {
-        String[][] grid = loadGridFromXML(XML_FILE_PATH);
+        String[][] grid = loadGridFromXML(
+                "path");
+        printGrid(grid);
+    }
+
+    public void DisplayGameBd(String filePath) {
+
+        String[][] grid = loadGridFromXML(filePath);
         printGrid(grid);
     }
 
     private static String[][] loadGridFromXML(String filePath) {
+        File inputFile = new File(filePath);
+        if (filePath.isEmpty() || !inputFile.exists()) {
+            // Default game board for initialization
+            inputFile = new File(System.getProperty("user.dir") + "/defaultGameBoard.xml");
+        }
+
         String[][] grid = new String[SIZE][SIZE]; // 6x6 grid
 
         // Position mapping according to the specified order
@@ -44,7 +53,7 @@ public class GameBoardView {
         };
 
         try {
-            File inputFile = new File(filePath);
+            // File inputFile = new File(filePath);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
@@ -136,5 +145,3 @@ public class GameBoardView {
         return padding + text + padding;
     }
 }
-
-
