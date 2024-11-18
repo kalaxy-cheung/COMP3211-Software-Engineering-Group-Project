@@ -21,6 +21,12 @@ public class GameBoardSaver {
         System.out.print("Enter the XML file name (with .xml extension): ");
         String fileName = scanner.nextLine();
 
+        // Call the method to update the game board
+        updateGameBoard(fileName);
+        scanner.close();
+    }
+
+    public static void updateGameBoard(String fileName) {
         try {
             // Load the existing XML file
             File inputFile = new File(fileName);
@@ -34,6 +40,7 @@ public class GameBoardSaver {
             Document doc = dBuilder.parse(inputFile);
             doc.getDocumentElement().normalize();
 
+            Scanner scanner = new Scanner(System.in);
             String continueUpdating = "yes"; // Initialize to "yes" to enter the loop
 
             while (continueUpdating.equalsIgnoreCase("yes")) {
@@ -88,7 +95,6 @@ public class GameBoardSaver {
 
             // Save the updated XML file after all modifications
             saveXML(doc, "updated_gameboard.xml");
-            scanner.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,7 +143,8 @@ public class GameBoardSaver {
             if (Integer.parseInt(square.getAttribute("position")) == position) {
                 square.getElementsByTagName("name").item(0).setTextContent(newName);
                 square.getElementsByTagName("price").item(0).setTextContent(String.valueOf(newPrice));
-                System.out.println("Updated square at position " + position + " to name: " + newName + " and price: " + newPrice);
+                System.out.println(
+                        "Updated square at position " + position + " to name: " + newName + " and price: " + newPrice);
                 found = true;
                 break; // Exit loop after updating
             }
