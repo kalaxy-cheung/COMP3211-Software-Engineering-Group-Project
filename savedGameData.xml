@@ -3,7 +3,14 @@
     <MonopolyGame>
         <PlayerList>
             <Player>
-                <Name>Liam</Name>
+                <Name>Bob</Name>
+                <Balance>1500</Balance>
+                <CurrentGameBoardPosition>1</CurrentGameBoardPosition>
+                <InJail>false</InJail>
+                <TurnsInJail>0</TurnsInJail>
+            </Player>
+            <Player>
+                <Name>Charlie</Name>
                 <Balance>1500</Balance>
                 <CurrentGameBoardPosition>1</CurrentGameBoardPosition>
                 <InJail>false</InJail>

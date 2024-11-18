@@ -33,7 +33,6 @@ public class GameView {
         for (var player : playerList) {
             player.getPlayerView().printPlayerPosition(player.getPlayer());
         }
-        System.out.println(" ");
     }
 
     public void printPlayerNameInOrder(List<PlayerController> playerList) {
