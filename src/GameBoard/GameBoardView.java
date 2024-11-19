@@ -1,10 +1,11 @@
 package GameBoard;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,14 +24,7 @@ public class GameBoardView {
         SPECIAL_SQUARE_TYPES.put("GoJail", "Go Jail");
     }
 
-    public static void main(String[] args) {
-        String[][] grid = loadGridFromXML(
-                "path");
-        printGrid(grid);
-    }
-
-    public void DisplayGameBd(String filePath) {
-
+    public void displayGameBD(String filePath) {
         String[][] grid = loadGridFromXML(filePath);
         printGrid(grid);
     }

@@ -10,6 +10,8 @@ public class GameBoard {
     private List<Square> squareList;
     private int startSquareIndex;
 
+    public String filePath;
+
     public GameBoard() {
         this.squareList = new ArrayList<>();
     }

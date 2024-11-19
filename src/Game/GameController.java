@@ -73,7 +73,6 @@ public class GameController {
             }
         }
 
-
         String filePath = System.getProperty("user.dir") + "/defaultGameBoard.xml"; // default game board
 
         if(function == 2) {
@@ -82,13 +81,17 @@ public class GameController {
                 System.out.print("Please input the game data file path: ");
                 String path = scanner.next();
                 res = this.game.getGameBoardController().loadGameBd(path);
-                if (res == -1) {
-                    System.out.println("\n\u001B[31mThe specified file does not exist or is not a valid file. Please try again.\u001B[0m\n");
+                this.game.getGameBoardController().getGameBoard().filePath = path;
+                if (res != 0) {
+                    System.out.println("\n\u001B[31mThe specified file does not exist or is not a valid file. Please try again. "
+                            + this.game.getGameBoardController().errorMsg + "\u001B[0m\n");
                 }
             }
             return;
         }
+
         this.game.getGameBoardController().loadGameBd(filePath);
+        this.game.getGameBoardController().getGameBoard().filePath = filePath;
     }
 
     public void initializeGamePlayer() {
@@ -187,7 +190,7 @@ public class GameController {
 
                 System.out.println("********************************************\n");
                 System.out.printf("Round %d: %s's turn.\n", game.currRound, game.playerList.peek().getPlayer().getName());
-                game.getGameBoardController().getGameBoardView().displayGameBD();
+                game.getGameBoardController().getGameBoardView().displayGameBD(this.game.getGameBoardController().getGameBoard().filePath);
                 gameView.printAllPlayerPosition(game.playerList);
 
                 PlayerController playerController = game.playerList.poll();
@@ -200,8 +203,9 @@ public class GameController {
                     System.out.println("1. Roll dice");
                     System.out.println("2. Query the next player");
                     System.out.println("3. Display player(s) status");
-                    System.out.println("4. Display game board");
-                    System.out.println("5. Save game");
+                    System.out.println("4. Display my status");
+                    System.out.println("5. Display game board and players' position");
+                    System.out.println("6. Save game");
                     System.out.print("Please enter your choice (1-5): ");
 
                     // Read the input as a string
@@ -226,12 +230,17 @@ public class GameController {
                             break;
                         case 3:
                             System.out.println("Displaying player(s) status...");
-                            displayPlyerStatus();
+                            displayPlyerStatus(playerController);
                             break;
                         case 4:
-                            game.getGameBoardController().getGameBoardView().displayGameBD();
+                            playerController.getPlayerView().displayStatus(playerController.getPlayer());
                             break;
                         case 5:
+                            game.getGameBoardController().getGameBoardView().displayGameBD(this.game.getGameBoardController().getGameBoard().filePath);
+                            gameView.printAllPlayerPosition(game.playerList);
+                            playerController.getPlayerView().printPlayerPosition(playerController.getPlayer());
+                            break;
+                        case 6:
                             System.out.println("Saving game...");
                             game.playerList.add(playerController);
                             saveGameData();
@@ -402,18 +411,15 @@ public class GameController {
         }
     }
 
-
-
-
-
-    private void displayPlyerStatus() {
+    private void displayPlyerStatus(PlayerController playerController) {
         Scanner scanner = new Scanner(System.in); // Ensure you have a scanner instance
-        System.out.println("Enter the player name to view their status, or enter '*' to see all players' info:");
+        System.out.println("\u001B[32mEnter the player name to view their status, or enter '*' to see all players' info:\u001B[0m");
 
         String input = scanner.nextLine(); // Read user input
         boolean playerFound = true;
 
         if (input.equals("*")) {
+            playerController.getPlayerView().displayStatus(playerController.getPlayer());
             // Display all players' information
             for(var player : game.playerList) {
                 player.getPlayerView().displayStatus(player.getPlayer());
@@ -427,6 +433,10 @@ public class GameController {
                     playerFound = true;
                     player.getPlayerView().displayStatus(player.getPlayer());
                 }
+            }
+            if(playerController.getPlayer().getName().equals(input)) {
+                playerFound = true;
+                playerController.getPlayerView().displayStatus(playerController.getPlayer());
             }
         }
 
