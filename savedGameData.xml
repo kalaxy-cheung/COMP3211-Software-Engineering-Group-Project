@@ -10,7 +10,7 @@
                 <TurnsInJail>0</TurnsInJail>
             </Player>
             <Player>
-                <Name>Noah</Name>
+                <Name></Name>
                 <Balance>1500</Balance>
                 <CurrentGameBoardPosition>9</CurrentGameBoardPosition>
                 <InJail>false</InJail>

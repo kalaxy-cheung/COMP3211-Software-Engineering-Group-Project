@@ -294,7 +294,7 @@ public class GameController {
                     game.playerList.add(playerController);
                 } else {
                     // Remove all properties owned by the player
-                    List<Property> propertiesToRemove = new ArrayList<>(playerController.getPlayer().getOwnedProperties()); // Correct type
+                    List<Property> propertiesToRemove = new ArrayList<>(playerController.getPlayer().getOwnedProperties());
 
                     for (Property property : propertiesToRemove) {
                         property.setOwner(null); // Reset ownership of the property
@@ -507,7 +507,22 @@ public class GameController {
                         Element playerElement = (Element) playerNode;
 
                         String name = getTagValue("Name", playerElement);
-                        int balance = Integer.parseInt(getTagValue("Balance", playerElement));
+                        String balanceStr = getTagValue("Balance", playerElement);
+
+                        if (name == null || name.isEmpty()) {
+                            System.out.println("\u001B[31mError: Missing or empty player name for player at index " + i + "\u001B[0m");
+                            return -1;
+                        }
+
+                        int balance;
+                        try {
+                            balance = Integer.parseInt(balanceStr);
+                        } catch (NumberFormatException e) {
+                            System.out.println("\u001B[31mError: Invalid balance value for player at index " + i + ". Must be an integer.\u001B[0m");
+                            return -1;
+                        }
+
+
                         int currGameBdPosition = Integer.parseInt(getTagValue("CurrentGameBoardPosition", playerElement));
                         boolean inJail = Boolean.parseBoolean(getTagValue("InJail", playerElement));
                         int turnsInJail = Integer.parseInt(getTagValue("TurnsInJail", playerElement));

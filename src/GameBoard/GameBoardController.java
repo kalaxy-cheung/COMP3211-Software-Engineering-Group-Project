@@ -9,8 +9,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+
 
 
 public class GameBoardController {
@@ -82,7 +81,7 @@ public class GameBoardController {
 
                         // Add the property to the game board
                         this.gameBoard.getSquareList().add(property);
-
+                        break;
 
                     case "IncomeTax":
                         System.out.println("Position " + position + " created Income Tax square.");
