@@ -24,6 +24,9 @@ public class GameBoardView {
         SPECIAL_SQUARE_TYPES.put("GoJail", "Go Jail");
     }
 
+    public GameBoardView() {
+    }
+
     public void displayGameBD(String filePath) {
         String[][] grid = loadGridFromXML(filePath);
         printGrid(grid);

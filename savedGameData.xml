@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
     <MonopolyGame>
+        <CurrRound>101</CurrRound>
         <PlayerList>
             <Player>
                 <Name>Paul</Name>
@@ -10,9 +11,9 @@
                 <TurnsInJail>0</TurnsInJail>
             </Player>
             <Player>
-                <Name></Name>
+                <Name>Katherine</Name>
                 <Balance>1500</Balance>
-                <CurrentGameBoardPosition>9</CurrentGameBoardPosition>
+                <CurrentGameBoardPosition>1</CurrentGameBoardPosition>
                 <InJail>false</InJail>
                 <TurnsInJail>0</TurnsInJail>
             </Player>

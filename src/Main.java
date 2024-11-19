@@ -52,9 +52,6 @@ public class Main {
                                 }
                                 gameController.startGame();
                                 success = true; // Exit the loop after successful loading
-
-
-
                             } catch (Exception e) {
                                 System.out.println("Error: Failed to load game data. " + e.getMessage());
                             }
