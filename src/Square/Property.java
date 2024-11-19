@@ -45,6 +45,7 @@ public class Property extends Square {
                 player.setBalance(player.getBalance() - price);  // Deduct the price from the player's balance
                 owner = player;  // Set the owner to the current player
                 System.out.println("Congratulations! You now own " + name + ".");
+                player.addProperty(this);
             } else {
                 System.out.println("You chose not to buy " + name + ".");
             }

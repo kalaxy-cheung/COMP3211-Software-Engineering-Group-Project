@@ -17,7 +17,7 @@ class TestGameBoard {
 
     @BeforeEach
     public void setUp() {
-        gameBoardController = new GameBoardController(); // Initialize your controller before each test
+        gameBoardController = new GameBoardController(); // Initialize the controller before each test
     }
 
     @Test

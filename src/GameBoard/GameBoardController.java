@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
 
+
 public class GameBoardController {
     private GameBoard gameBoard;
     private GameBoardView gameBoardView;
@@ -76,8 +77,10 @@ public class GameBoardController {
                         String name = eElement.getElementsByTagName("name").item(0).getTextContent();
                         String price = eElement.getElementsByTagName("price").item(0).getTextContent();
                         String rent = eElement.getElementsByTagName("rent").item(0).getTextContent();
-                        String owner = eElement.getElementsByTagName("owner").item(0).getTextContent();
+                        // Create the Property object
                         Property property = new Property(name, Integer.parseInt(price), Integer.parseInt(rent));
+
+                        // Add the property to the game board
                         this.gameBoard.getSquareList().add(property);
                         break;
 

@@ -46,13 +46,16 @@ public class Main {
                             }
 
                             try {
-                                gameController.loadGameData(filePath);
+                                int res = gameController.loadGameData(filePath);
+                                if (res != 0) {
+                                    break;
+                                }
+                                gameController.startGame();
                                 success = true; // Exit the loop after successful loading
                             } catch (Exception e) {
                                 System.out.println("Error: Failed to load game data. " + e.getMessage());
                             }
                         }
-                        gameController.startGame();
                         break;
 
                     case 3:
