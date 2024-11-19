@@ -1,5 +1,11 @@
 package Player;
 
+import Square.Property;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
     private String name;
     private int balance;
@@ -7,6 +13,7 @@ public class Player {
     private boolean inJail;
     private int turnsInJail;
     private int releaseFromJailRoll;
+    private List<Property> OwnedList;
 
     public Player(String name) {
         this.name = name;
@@ -14,6 +21,7 @@ public class Player {
         this.currGameBdPosition = 1;
         this.inJail = false;
         this.turnsInJail = 0;
+        this.OwnedList = new ArrayList<>();
     }
 
     public String getName() {
@@ -64,4 +72,29 @@ public class Player {
         this.releaseFromJailRoll = releaseFromJailRoll;
     }
 
+    public void addProperty(Property property) {
+        OwnedList.add(property); // Add a property to the owned list
+    }
+
+    public void removeProperty(Property property) {
+        OwnedList.remove(property); // Remove a property from the owned list
+    }
+
+    public String getOwnedList() {
+        if (OwnedList.isEmpty()) {
+            return "None"; // Return "None" if the list is empty
+        }
+        StringBuilder names = new StringBuilder();
+        for (Property property : OwnedList) {
+            names.append(property.getName()).append(", ");
+        }
+        return names.substring(0, names.length() - 2);
+    }
+
+    public List<Property> getOwnedProperties() {
+        return new ArrayList<>(OwnedList); // Return a copy of the list for safety
+    }
+
 }
+
+

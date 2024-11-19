@@ -10,7 +10,7 @@ public class Property extends Square {
     private int rent;
     private Player owner;
 
-    public Property(String name, int price, int rent) {
+    public Property(String name,  int price, int rent) {
         this.name = name;
         this.price = price;
         this.rent = rent;
@@ -45,6 +45,7 @@ public class Property extends Square {
                 player.setBalance(player.getBalance() - price);  // Deduct the price from the player's balance
                 owner = player;  // Set the owner to the current player
                 System.out.println("Congratulations! You now own " + name + ".");
+                player.addProperty(this);
             } else {
                 System.out.println("You chose not to buy " + name + ".");
             }

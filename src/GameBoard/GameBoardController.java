@@ -9,6 +9,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class GameBoardController {
@@ -75,10 +77,12 @@ public class GameBoardController {
                         String name = eElement.getElementsByTagName("name").item(0).getTextContent();
                         String price = eElement.getElementsByTagName("price").item(0).getTextContent();
                         String rent = eElement.getElementsByTagName("rent").item(0).getTextContent();
-                        String owner = eElement.getElementsByTagName("owner").item(0).getTextContent();
+                        // Create the Property object
                         Property property = new Property(name, Integer.parseInt(price), Integer.parseInt(rent));
+
+                        // Add the property to the game board
                         this.gameBoard.getSquareList().add(property);
-                        break;
+
 
                     case "IncomeTax":
                         System.out.println("Position " + position + " created Income Tax square.");

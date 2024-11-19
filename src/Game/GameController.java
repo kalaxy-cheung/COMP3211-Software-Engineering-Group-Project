@@ -190,7 +190,7 @@ public class GameController {
 
                 System.out.println("********************************************\n");
                 System.out.printf("Round %d: %s's turn.\n", game.currRound, game.playerList.peek().getPlayer().getName());
-                game.getGameBoardController().getGameBoardView().displayGameBD(this.game.getGameBoardController().getGameBoard().filePath);
+                //game.getGameBoardController().getGameBoardView().displayGameBD(this.game.getGameBoardController().getGameBoard().filePath);
                 gameView.printAllPlayerPosition(game.playerList);
 
                 PlayerController playerController = game.playerList.poll();
@@ -199,7 +199,7 @@ public class GameController {
                 while (!threwDice) {
 
                     // Display menu options for user input
-                    System.out.println("********************************************");
+                    System.out.println("\n********************************************");
                     System.out.println("1. Roll dice");
                     System.out.println("2. Query the next player");
                     System.out.println("3. Display player(s) status");
@@ -290,8 +290,19 @@ public class GameController {
                     square.access(playerController.getPlayer());
                 }
 
-                if(playerController.getPlayer().getBalance() > 0){
+                if (playerController.getPlayer().getBalance() > 0) {
                     game.playerList.add(playerController);
+                } else {
+                    // Remove all properties owned by the player
+                    List<Property> propertiesToRemove = new ArrayList<>(playerController.getPlayer().getOwnedProperties()); // Correct type
+
+                    for (Property property : propertiesToRemove) {
+                        property.setOwner(null); // Reset ownership of the property
+                        playerController.getPlayer().removeProperty(property); // Remove property from the player's list
+                    }
+
+                    System.out.println("\u001B[31m" + playerController.getPlayer().getName() +
+                            " has been removed from the game and their properties are now unowned.\u001B[0m");
                 }
             }
 
@@ -477,7 +488,7 @@ public class GameController {
 
         this.game.getGameBoardController().loadGameBd(filePath);
 
-        System.out.print("\nReading Players....\n");
+        System.out.print("\nReading Players and Properties...\n");
         try {
             File xmlFile = new File(filePath);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -486,10 +497,9 @@ public class GameController {
 
             doc.getDocumentElement().normalize();
 
+            // Parse players
             NodeList playerNodes = doc.getElementsByTagName("Player");
-
             if (playerNodes.getLength() > 0) {
-                // Iterate through all Player nodes
                 for (int i = 0; i < playerNodes.getLength(); i++) {
                     Node playerNode = playerNodes.item(i);
 
@@ -497,32 +507,10 @@ public class GameController {
                         Element playerElement = (Element) playerNode;
 
                         String name = getTagValue("Name", playerElement);
-                        String balanceStr = getTagValue("Balance", playerElement);
-
-                        if (name == null || name.isEmpty()) {
-                            System.err.println("Error: Missing or empty player name for player at index " + i);
-                            return -1;
-                        }
-
-                        int balance;
-                        try {
-                            balance = Integer.parseInt(balanceStr);
-                        } catch (NumberFormatException e) {
-                            System.err.println("Error: Invalid balance value for player at index " + i + ". Must be an integer.");
-                            return -1;
-                        }
-
+                        int balance = Integer.parseInt(getTagValue("Balance", playerElement));
                         int currGameBdPosition = Integer.parseInt(getTagValue("CurrentGameBoardPosition", playerElement));
                         boolean inJail = Boolean.parseBoolean(getTagValue("InJail", playerElement));
                         int turnsInJail = Integer.parseInt(getTagValue("TurnsInJail", playerElement));
-
-                        // Print player information
-                        System.out.println("\u001B[32m\nPlayer " + (i + 1) + ":\u001B[0m");
-                        System.out.println("Name: " + name);
-                        System.out.println("Balance: " + balance);
-                        System.out.println("Current Game Board Position: " + currGameBdPosition);
-                        System.out.println("In Jail: " + inJail);
-                        System.out.println("Turns in Jail: " + turnsInJail);
 
                         // Create player object
                         Player player = new Player(name);
@@ -531,21 +519,76 @@ public class GameController {
                         player.setInJail(inJail);
                         player.setTurnsInJail(turnsInJail);
 
+                        // Add player to the player list
                         game.playerList.add(new PlayerController(player));
-
-
                     }
                 }
             } else {
-                return -1;
+                return -1; // No players found
             }
+
+            // Parse properties
+            // Assign properties to players based on the game board and owner name
+            NodeList squareNodes = doc.getElementsByTagName("squares");
+            for (int i = 0; i < squareNodes.getLength(); i++) {
+                Node squareNode = squareNodes.item(i);
+
+                if (squareNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element squareElement = (Element) squareNode;
+
+                    if ("Property".equals(squareElement.getAttribute("type"))) {
+                        String name = getTagValue("name", squareElement);
+                        String ownerName = getTagValue("owner", squareElement);
+
+                        // Retrieve the existing property from the game board
+                        for (Square square : game.getGameBoardController().getGameBoard().getSquareList()) {
+                            if (square instanceof Property) {
+                                Property property = (Property) square;
+                                if (property.getName().equals(name)) {
+                                    // Assign ownership if an owner is specified
+                                    if (ownerName != null && !ownerName.isEmpty()) {
+                                        for (PlayerController pc : game.playerList) {
+                                            Player player = pc.getPlayer();
+                                            if (player.getName().equals(ownerName)) {
+                                                property.setOwner(player);
+                                                player.addProperty(property); // Add the existing property to the player's owned list
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    break; // Stop searching once the property is found
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            // Display all players' information
+            System.out.println("\nDisplaying all players' information:");
+            for (PlayerController pc : game.playerList) {
+                Player player = pc.getPlayer();
+                System.out.println("\u001B[32m\nPlayer: " + player.getName() + "\u001B[0m");
+                System.out.println("Balance: " + player.getBalance());
+                System.out.println("Current Game Board Position: " + player.getCurrGameBdPosition());
+                System.out.println("In Jail: " + player.isInJail());
+                System.out.println("Turns in Jail: " + player.getTurnsInJail());
+                System.out.println("Owned Properties: " + player.getOwnedList());
+            }
+
         } catch (Exception e) {
+            System.err.println("Error: Failed to load game data. " + e.getMessage());
             e.printStackTrace();
             return -1;
         }
+
         this.isNewGame = false;
         return 0; // Success
     }
+
+
+
 
     private String getTagValue(String tagName, Element element) {
         NodeList nodeList = element.getElementsByTagName(tagName);

@@ -68,7 +68,6 @@ public class Main {
 
                     default:
                         System.out.println("\u001B[31m\nInvalid choice. Please select a valid option.\n\u001B[0m");
-
                         break;
                 }
 

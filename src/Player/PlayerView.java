@@ -11,5 +11,8 @@ public class PlayerView {
         System.out.println("Current Game Board Position: " + player.getCurrGameBdPosition());
         System.out.println("In Jail: " + player.isInJail());
         System.out.println("Turns in Jail: " + player.getTurnsInJail());
+        System.out.println("Owned Properties: " + player.getOwnedList());
     }
+
+
 }
