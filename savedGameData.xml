@@ -5,7 +5,7 @@
         <PlayerList>
             <Player>
                 <Name>Paul</Name>
-                <Balance>10</Balance>
+                <Balance>1500</Balance>
                 <CurrentGameBoardPosition>4</CurrentGameBoardPosition>
                 <InJail>false</InJail>
                 <TurnsInJail>0</TurnsInJail>

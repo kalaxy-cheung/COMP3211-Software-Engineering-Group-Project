@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root>
+<MonopolyGame>
+<CurrRound>101</CurrRound>
+<PlayerList>
+<Player>
+<Name>Paul</Name>
+<Balance>1500</Balance>
+<CurrentGameBoardPosition>4</CurrentGameBoardPosition>
+<InJail>false</InJail>
+<TurnsInJail>0</TurnsInJail>
+</Player>
+<Player>
+<Name>Katherine</Name>
+<Balance>1500</Balance>
+<CurrentGameBoardPosition>1</CurrentGameBoardPosition>
+<InJail>false</InJail>
+<TurnsInJail>0</TurnsInJail>
+</Player>
+</PlayerList>
+</MonopolyGame>
+</root>

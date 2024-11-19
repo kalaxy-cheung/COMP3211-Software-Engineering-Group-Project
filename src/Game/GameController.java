@@ -155,7 +155,6 @@ public class GameController {
         return "Unknown"; // Fallback for unknown square types
     }
 
-
     /*
     *   game logic
     */
@@ -164,7 +163,6 @@ public class GameController {
         if (game.playerList.peek() == null) {
             throw new IllegalStateException("\u001B[31m\n\nPlayer list is empty. Cannot proceed with the game.\u001B[0m\n");
         }
-
 
         Scanner scanner = new Scanner(System.in);
 
@@ -425,7 +423,7 @@ public class GameController {
         }
     }
 
-    private void displayPlyerStatus(PlayerController playerController) {
+    public void displayPlyerStatus(PlayerController playerController) {
         Scanner scanner = new Scanner(System.in); // Ensure you have a scanner instance
         System.out.println("\u001B[32mEnter the player name to view their status, or enter '*' to see all players' info:\u001B[0m");
 
@@ -500,7 +498,6 @@ public class GameController {
 
             doc.getDocumentElement().normalize();
 
-
             // round handling
             Node currRoundNode = doc.getElementsByTagName("CurrRound").item(0);
             if (currRoundNode == null || currRoundNode.getTextContent().isEmpty()) {
@@ -534,7 +531,6 @@ public class GameController {
                             System.out.println("\u001B[31mError: Invalid balance value for player at index " + i + ". Must be an integer.\u001B[0m");
                             return -1;
                         }
-
 
                         int currGameBdPosition = Integer.parseInt(getTagValue("CurrentGameBoardPosition", playerElement));
                         boolean inJail = Boolean.parseBoolean(getTagValue("InJail", playerElement));
@@ -592,7 +588,6 @@ public class GameController {
                 }
             }
 
-
             // Display all players' information
             System.out.println("\nDisplaying all players' information:");
             for (PlayerController pc : game.playerList) {
@@ -614,9 +609,6 @@ public class GameController {
         this.isNewGame = false;
         return 0; // Success
     }
-
-
-
 
     private String getTagValue(String tagName, Element element) {
         NodeList nodeList = element.getElementsByTagName(tagName);
