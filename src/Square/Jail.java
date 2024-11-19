@@ -50,7 +50,8 @@ public class Jail extends Square {
             String response = scanner.nextLine().toUpperCase();
 
             while (!response.equals("Y") && !response.equals("N")) {
-                System.out.println("Invalid input! Please try again.");
+                System.out.println("\n\u001B[31mInvalid input! Please try again.\u001B[0m\n");
+                System.out.print("Choice (Y/N): ");
                 response = scanner.nextLine().toUpperCase();
             }
 

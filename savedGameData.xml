@@ -3,9 +3,16 @@
     <MonopolyGame>
         <PlayerList>
             <Player>
-                <Name>Liam</Name>
+                <Name>Paul</Name>
                 <Balance>1500</Balance>
-                <CurrentGameBoardPosition>1</CurrentGameBoardPosition>
+                <CurrentGameBoardPosition>4</CurrentGameBoardPosition>
+                <InJail>false</InJail>
+                <TurnsInJail>0</TurnsInJail>
+            </Player>
+            <Player>
+                <Name>Noah</Name>
+                <Balance>1500</Balance>
+                <CurrentGameBoardPosition>9</CurrentGameBoardPosition>
                 <InJail>false</InJail>
                 <TurnsInJail>0</TurnsInJail>
             </Player>
@@ -86,6 +93,86 @@
             </squares>
             <squares position="19" type="Chance"/>
             <squares position="20" type="Property">
+                <name>Tai O</name>
+                <price>600</price>
+                <rent>25</rent>
+                <owner/>
+            </squares>
+            <squares position="21" type="Go"/>
+            <squares position="22" type="Property">
+                <name>Central</name>
+                <price>800</price>
+                <rent>90</rent>
+                <owner/>
+            </squares>
+            <squares position="23" type="Property">
+                <name>Wan Chai</name>
+                <price>700</price>
+                <rent>65</rent>
+                <owner/>
+            </squares>
+            <squares position="24" type="IncomeTax"/>
+            <squares position="25" type="Property">
+                <name>Stanley</name>
+                <price>600</price>
+                <rent>60</rent>
+                <owner/>
+            </squares>
+            <squares position="26" type="Jail"/>
+            <squares position="27" type="Property">
+                <name>Shek O</name>
+                <price>400</price>
+                <rent>10</rent>
+                <owner/>
+            </squares>
+            <squares position="28" type="Property">
+                <name>Mong Kok</name>
+                <price>500</price>
+                <rent>40</rent>
+                <owner/>
+            </squares>
+            <squares position="29" type="Chance"/>
+            <squares position="30" type="Property">
+                <name>Tsing Yi</name>
+                <price>400</price>
+                <rent>15</rent>
+                <owner/>
+            </squares>
+            <squares position="31" type="FreeParking"/>
+            <squares position="32" type="Property">
+                <name>Shatin</name>
+                <price>700</price>
+                <rent>75</rent>
+                <owner/>
+            </squares>
+            <squares position="33" type="Chance"/>
+            <squares position="34" type="Property">
+                <name>Tuen Mun</name>
+                <price>400</price>
+                <rent>20</rent>
+                <owner/>
+            </squares>
+            <squares position="35" type="Property">
+                <name>Tai Po</name>
+                <price>500</price>
+                <rent>25</rent>
+                <owner/>
+            </squares>
+            <squares position="36" type="GoJail"/>
+            <squares position="37" type="Property">
+                <name>Sai Kung</name>
+                <price>400</price>
+                <rent>10</rent>
+                <owner/>
+            </squares>
+            <squares position="38" type="Property">
+                <name>Yuen Long</name>
+                <price>400</price>
+                <rent>25</rent>
+                <owner/>
+            </squares>
+            <squares position="39" type="Chance"/>
+            <squares position="40" type="Property">
                 <name>Tai O</name>
                 <price>600</price>
                 <rent>25</rent>
