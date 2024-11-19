@@ -212,8 +212,8 @@ public class GameController {
                     String input = scanner.nextLine().trim();
 
                     // Combine validation checks
-                    if (input.isEmpty() || !input.matches("\\d+") || (Integer.parseInt(input) < 1 || Integer.parseInt(input) > 5)) {
-                        System.out.println("\n\u001B[31mInvalid input! Please enter a valid number between 1 and 5.\u001B[0m\n");
+                    if (input.isEmpty() || !input.matches("\\d+") || (Integer.parseInt(input) < 1 || Integer.parseInt(input) > 6)) {
+                        System.out.println("\n\u001B[31mInvalid input! Please enter a valid number between 1 and 6.\u001B[0m\n");
                         continue;
                     }
 
