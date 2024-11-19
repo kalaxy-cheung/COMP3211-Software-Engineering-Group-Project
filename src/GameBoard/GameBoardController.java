@@ -34,6 +34,7 @@ public class GameBoardController {
     */
     public int loadGameBd(String filePath) {
         this.errorMsg = "";
+        this.getGameBoard().filePath = filePath;
 
         File fXmlFile = new File(filePath);
         if(filePath.isEmpty() || !fXmlFile.exists())
