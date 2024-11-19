@@ -60,8 +60,16 @@ public class Main {
 
                     case 3:
                         // Design game board
-                        String xmlFileName = "defaultGameBoard.xml"; // Specify your XML file here
-                        GameBoardSaver.updateGameBoard(xmlFileName);
+                        System.out.print("Please enter the XML file name: ");
+                        String xmlFileName = scanner.next(); // Get user input for the file name
+
+                        // Error checking for file existence
+                        File xmlFile = new File(xmlFileName);
+                        if (!xmlFile.exists() || !xmlFile.isFile()) {
+                            System.out.println("\n\u001B[31mThe specified XML file does not exist or is not a valid file. Please try again.\u001B[0m\n");
+                        } else {
+                            GameBoardSaver.updateGameBoard(xmlFileName);
+                        }
                         break;
                     case 4:
                         // Quit
