@@ -81,7 +81,6 @@ public class GameController {
                 System.out.print("Please input the game data file path: ");
                 String path = scanner.next();
                 res = this.game.getGameBoardController().loadGameBd(path);
-                this.game.getGameBoardController().getGameBoard().filePath = path;
                 if (res != 0) {
                     System.out.println("\n\u001B[31mThe specified file does not exist or is not a valid file. Please try again. "
                             + this.game.getGameBoardController().errorMsg + "\u001B[0m\n");
@@ -91,7 +90,6 @@ public class GameController {
         }
 
         this.game.getGameBoardController().loadGameBd(filePath);
-        this.game.getGameBoardController().getGameBoard().filePath = filePath;
     }
 
     public void initializeGamePlayer() {
@@ -206,7 +204,7 @@ public class GameController {
                     System.out.println("4. Display my status");
                     System.out.println("5. Display game board and players' position");
                     System.out.println("6. Save game");
-                    System.out.print("Please enter your choice (1-5): ");
+                    System.out.print("Please enter your choice (1-6): ");
 
                     // Read the input as a string
                     String input = scanner.nextLine().trim();
@@ -326,6 +324,11 @@ public class GameController {
             // MonopolyGame element
             Element monopolyGameElement = doc.createElement("MonopolyGame");
             rootElement.appendChild(monopolyGameElement);
+
+            // Round element
+            Element currRoundElement = doc.createElement("CurrRound");
+            currRoundElement.appendChild(doc.createTextNode(String.valueOf(this.game.currRound)));
+            monopolyGameElement.appendChild(currRoundElement);
 
             // PlayerList element
             Element playerListElement = doc.createElement("PlayerList");
@@ -486,8 +489,16 @@ public class GameController {
 
             doc.getDocumentElement().normalize();
 
-            NodeList playerNodes = doc.getElementsByTagName("Player");
+            // round handling
+            Node currRoundNode = doc.getElementsByTagName("CurrRound").item(0);
+            if (currRoundNode == null || currRoundNode.getTextContent().isEmpty()) {
+                System.err.println("Error: CurrRound is not defined.");
+                return -1;
+            }
+            this.game.currRound = Integer.parseInt(currRoundNode.getTextContent());
 
+            // players handling
+            NodeList playerNodes = doc.getElementsByTagName("Player");
             if (playerNodes.getLength() > 0) {
                 // Iterate through all Player nodes
                 for (int i = 0; i < playerNodes.getLength(); i++) {
@@ -532,8 +543,6 @@ public class GameController {
                         player.setTurnsInJail(turnsInJail);
 
                         game.playerList.add(new PlayerController(player));
-
-
                     }
                 }
             } else {
