@@ -2,7 +2,6 @@ import Game.GameController;
 import GameBoard.GameBoardSaver;
 
 import java.io.File;
-import Player.Player;
 import java.util.Scanner;
 
 public class Main {
@@ -18,7 +17,7 @@ public class Main {
             System.out.println("3. Design game board");
             System.out.println("4. Quit");
             System.out.println("*****************************");
-            System.out.print("Choice: ");
+            System.out.print("\u001B[36mChoice: \u001B[0m");
 
             try {
                 int function = scanner.nextInt();
@@ -42,8 +41,7 @@ public class Main {
                             // Error checking for file existence and loading game data
                             File file = new File(filePath);
                             if (!file.exists() || !file.isFile()) {
-                                System.out.println(
-                                        "\u001B[31mError: The specified file does not exist or is not a valid file. Please try again.\u001B[0m\n");
+                                System.out.println("\n\u001B[31mThe specified file does not exist or is not a valid file. Please try again.\u001B[0m\n");
                                 continue; // Retry the loop
                             }
 
@@ -53,7 +51,6 @@ public class Main {
                                 success = true; // Exit the loop after successful loading
                             } catch (Exception e) {
                                 System.out.println("Error: Failed to load game data. " + e.getMessage());
-                                System.out.println("Please try again.");
                             }
                         }
                         break;
@@ -77,7 +74,8 @@ public class Main {
 
             } catch (Exception e) {
                 System.out.println("\n\u001B[31mInvalid input. Please enter a valid number.\u001B[0m\n");
-                scanner.next(); // Clear the invalid input
+                scanner.nextLine();
+
             }
         }
     }

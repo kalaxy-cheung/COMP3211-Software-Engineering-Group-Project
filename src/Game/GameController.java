@@ -55,30 +55,40 @@ public class GameController {
         Scanner scanner = new Scanner(System.in);
         int function = 0;
 
-        while(function != 1 && function != 2){
+        while (true) {
             System.out.println("1. using default game board");
             System.out.println("2. import custom game board");
-            System.out.println("Please enter ...");
-            function = scanner.nextInt();
-            if(function != 1 && function != 2) {
-                System.out.println("Invalid command!");
+            System.out.print("\u001B[36mChoice: \u001B[0m");
+
+            if (scanner.hasNextInt()) {
+                function = scanner.nextInt();
+                if (function == 1 || function == 2) {
+                    break; // Valid input, exit the loop
+                } else {
+                    System.out.println("\n\u001B[31mInvalid input. Please enter a valid number (1 or 2).\u001B[0m\n");
+                }
+            } else {
+                System.out.println("\n\u001B[31mInvalid input. Please enter a number.\u001B[0m\n");
+                scanner.next(); // Consume the invalid input
             }
         }
 
-        String filePath = ""; // default game board
+
+        String filePath = System.getProperty("user.dir") + "/defaultGameBoard.xml"; // default game board
 
         if(function == 2) {
-            // start a new game with a custom game board
-            System.out.println("Please enter custom game board file path");
-            filePath = scanner.next();
+            int res = -1;
+            while (res != 0) {
+                System.out.print("Please input the game data file path: ");
+                String path = scanner.next();
+                res = this.game.getGameBoardController().loadGameBd(path);
+                if (res == -1) {
+                    System.out.println("\n\u001B[31mThe specified file does not exist or is not a valid file. Please try again.\u001B[0m\n");
+                }
+            }
+            return;
         }
-
-        int res = -1;
-        res = this.game.getGameBoardController().loadGameBd(filePath);
-        if(res != 0) {
-            System.out.printf("Load custom game board fail! %s%n", this.game.getGameBoardController().errorMsg);
-
-        }
+        this.game.getGameBoardController().loadGameBd(filePath);
     }
 
     public void initializeGamePlayer() {
@@ -88,15 +98,23 @@ public class GameController {
         // Loop until a valid number of players is entered
         while (true) {
             System.out.print("Enter number of players (" + Game.MIN_PLAYER_NUMBER + " to " + Game.MAX_PLAYER_NUMBER + "): ");
-            numPlayers = scanner.nextInt();
-            scanner.nextLine();
 
-            if (numPlayers >= Game.MIN_PLAYER_NUMBER && numPlayers <= Game.MAX_PLAYER_NUMBER) {
-                break; // Exit the loop if the input is valid
+            if (scanner.hasNextInt()) {
+                numPlayers = scanner.nextInt();
+                scanner.nextLine(); // Consume the remaining newline
+
+                if (numPlayers >= Game.MIN_PLAYER_NUMBER && numPlayers <= Game.MAX_PLAYER_NUMBER) {
+                    break; // Exit the loop if the input is valid
+                } else {
+                    System.out.println("\n\u001B[31mInvalid number of players. Please enter a number between "
+                            + Game.MIN_PLAYER_NUMBER + " and " + Game.MAX_PLAYER_NUMBER + ".\u001B[0m\n");
+                }
             } else {
-                System.out.println("Invalid number of players. Please try again.");
+                System.out.println("\n\u001B[31mInvalid input. Please enter a valid number.\u001B[0m\n");
+                scanner.next(); // Consume the invalid input
             }
         }
+
 
         System.out.println("Number of players set to: " + numPlayers);
 
@@ -141,6 +159,12 @@ public class GameController {
     *   game logic
     */
     public void startGame() {
+
+        if (game.playerList.peek() == null) {
+            throw new IllegalStateException("\u001B[31m\n\nPlayer list is empty. Cannot proceed with the game.\u001B[0m\n");
+        }
+
+
         Scanner scanner = new Scanner(System.in);
 
         //The system shall place all player tokens on the "Go" square at the start of the game.
@@ -161,7 +185,7 @@ public class GameController {
         while(game.currRound <= Game.MAX_ROUNDS && game.playerList.size()>1) {
             for (int i=0; i<game.playerList.size(); i++){
 
-                System.out.println("********************************************");
+                System.out.println("********************************************\n");
                 System.out.printf("Round %d: %s's turn.\n", game.currRound, game.playerList.peek().getPlayer().getName());
                 game.getGameBoardController().getGameBoardView().displayGameBD();
                 gameView.printAllPlayerPosition(game.playerList);
@@ -172,7 +196,7 @@ public class GameController {
                 while (!threwDice) {
 
                     // Display menu options for user input
-                    System.out.println("\n********************************************");
+                    System.out.println("********************************************");
                     System.out.println("1. Roll dice");
                     System.out.println("2. Query the next player");
                     System.out.println("3. Display player(s) status");
@@ -180,34 +204,38 @@ public class GameController {
                     System.out.println("5. Save game");
                     System.out.print("Please enter your choice (1-5): ");
 
-                    // Read user input
-                    int function = scanner.nextInt();
+                    // Read the input as a string
+                    String input = scanner.nextLine().trim();
 
-                    // Validate user input
-                    if (function < 1 || function > 5) {
-                        System.out.println("Invalid command! Please enter a number between 1 and 5.");
-                    } else {
-                        // Handle valid commands
-                        switch (function) {
-                            case 1:
-                                threwDice = true; // Assuming this indicates that dice have been rolled
-                                break;
-                            case 2:
-                                System.out.println("\u001B[32mThe next player is " + this.game.playerList.peek().getPlayer().getName() + "\u001B[0m");
-                                break;
-                            case 3:
-                                System.out.println("Displaying player(s) status...");
-                                displayPlyerStatus();
-                                break;
-                            case 4:
-                                game.getGameBoardController().getGameBoardView().displayGameBD();
-                                break;
-                            case 5:
-                                System.out.println("Saving game...");
-                                game.playerList.add(playerController);
-                                saveGameData();
-                                return;
-                        }
+                    // Combine validation checks
+                    if (input.isEmpty() || !input.matches("\\d+") || (Integer.parseInt(input) < 1 || Integer.parseInt(input) > 5)) {
+                        System.out.println("\n\u001B[31mInvalid input! Please enter a valid number between 1 and 5.\u001B[0m\n");
+                        continue;
+                    }
+
+                    // If input is valid, convert it to an integer
+                    int function = Integer.parseInt(input);
+
+                    // Handle valid commands
+                    switch (function) {
+                        case 1:
+                            threwDice = true; // Assuming this indicates that dice have been rolled
+                            break;
+                        case 2:
+                            System.out.println("\u001B[32mThe next player is " + this.game.playerList.peek().getPlayer().getName() + "\u001B[0m");
+                            break;
+                        case 3:
+                            System.out.println("Displaying player(s) status...");
+                            displayPlyerStatus();
+                            break;
+                        case 4:
+                            game.getGameBoardController().getGameBoardView().displayGameBD();
+                            break;
+                        case 5:
+                            System.out.println("Saving game...");
+                            game.playerList.add(playerController);
+                            saveGameData();
+                            return;
                     }
                 }
 
@@ -499,7 +527,6 @@ public class GameController {
                     }
                 }
             } else {
-                System.err.println("No player nodes found in the XML.");
                 return -1;
             }
         } catch (Exception e) {

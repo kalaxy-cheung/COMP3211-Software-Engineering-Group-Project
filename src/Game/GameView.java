@@ -8,25 +8,6 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class GameView {
-    public GameView() {
-    }
-
-    public void printUserCommands() {
-        Scanner scanner = new Scanner(System.in);
-        int function = 0;
-
-        while(function < 1 || function > 3){
-            System.out.println("1. Display my status");
-            System.out.println("2. Display other player status");
-            System.out.println("3. Display game board");
-            function = scanner.nextInt();
-            if(function < 1 || function > 3) {
-                System.out.println("Invalid command!");
-            }
-        }
-
-
-    }
 
     public void printAllPlayerPosition(Queue<PlayerController> playerList) {
         System.out.println("\nPlayers' position:");
