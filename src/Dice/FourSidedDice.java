@@ -23,5 +23,4 @@ public class FourSidedDice {
         }
         return result;
     }
-
 }
