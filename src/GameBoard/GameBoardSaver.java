@@ -154,7 +154,7 @@ public class GameBoardSaver {
                         int newPosition = getPositionInput(scanner, "Enter the new position: ");
                         updateSquarePosition(doc, oldPosition, newPosition);
                         break;
-                        
+
 
                     case 3:
                         updateSquareTypeMenu(doc, scanner);
