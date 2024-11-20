@@ -1,19 +1,24 @@
 package GameBoard;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import Player.Player;
+import Player.PlayerController;
+import Square.Square;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 public class GameBoardView {
     private static final int SIZE = 6; // Size of the grid
 
     private static final Map<String, String> SPECIAL_SQUARE_TYPES = new HashMap<>();
+    static String XML_FILE_PATH = "gameboard.xml"; // For testing, delete this
 
     static {
         SPECIAL_SQUARE_TYPES.put("Go", "Go");
@@ -24,7 +29,9 @@ public class GameBoardView {
         SPECIAL_SQUARE_TYPES.put("GoJail", "Go Jail");
     }
 
-    public GameBoardView() {
+    public static void main(String[] args) { // For testing, delete this
+        String[][] grid = loadGridFromXML(XML_FILE_PATH);
+        printGrid(grid);
     }
 
     public void displayGameBD(String filePath) {
@@ -33,12 +40,6 @@ public class GameBoardView {
     }
 
     private static String[][] loadGridFromXML(String filePath) {
-        File inputFile = new File(filePath);
-        if (filePath.isEmpty() || !inputFile.exists()) {
-            // Default game board for initialization
-            inputFile = new File(System.getProperty("user.dir") + "/defaultGameBoard.xml");
-        }
-
         String[][] grid = new String[SIZE][SIZE]; // 6x6 grid
 
         // Position mapping according to the specified order
@@ -50,7 +51,7 @@ public class GameBoardView {
         };
 
         try {
-            // File inputFile = new File(filePath);
+            File inputFile = new File(filePath);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
@@ -81,11 +82,16 @@ public class GameBoardView {
                         String price = square.getElementsByTagName("price").item(0) != null
                                 ? square.getElementsByTagName("price").item(0).getTextContent()
                                 : "";
+                        String rent = square.getElementsByTagName("rent").item(0) != null
+                                ? square.getElementsByTagName("rent").item(0).getTextContent()
+                                : "";
 
-                        // Construct the grid entry based on the presence of price
-                        grid[row][col] = name;
+                        // Build grid entry including rent
+                        String positionDisplay = position + " ";
+                        String rentDisplay = !rent.isEmpty() ? " Rent:$" + rent : "";
+                        grid[row][col] = positionDisplay + name;
                         if (!price.isEmpty()) {
-                            grid[row][col] += " ($" + price + ")";
+                            grid[row][col] += " ($" + price + ")" + rentDisplay;
                         }
                     }
                 }
@@ -111,13 +117,13 @@ public class GameBoardView {
 
     private static void printGrid(String[][] grid) {
         int maxLength = getMaxTextLength(grid);
-        String horizontalLine = "+" + "-".repeat(maxLength + 3).repeat(SIZE) + "+";
+        String horizontalLine = "+" + "-".repeat(maxLength).repeat(SIZE) + "+";
 
         for (int i = 0; i < SIZE; i++) {
             System.out.println(horizontalLine);
             for (int j = 0; j < SIZE; j++) {
                 System.out.print("|");
-                System.out.printf("%-" + (maxLength + 2) + "s", centerText(grid[i][j], maxLength + 2));
+                System.out.printf("%-" + (maxLength - 1) + "s", centerText(grid[i][j], maxLength - 1));
             }
             System.out.println("|");
         }
