@@ -59,7 +59,7 @@ public class Main {
                         break;
 
                     case 3:
-                        System.out.print("Please enter the XML file name: ");
+                        System.out.print("Please enter the XML file path: ");
                         String xmlFileName = scanner.next(); // Get user input for the file name
 
                         // Error checking for file existence
