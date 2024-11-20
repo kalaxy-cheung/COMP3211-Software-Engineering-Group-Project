@@ -155,7 +155,6 @@ public class GameBoardSaver {
                         updateSquarePosition(doc, oldPosition, newPosition);
                         break;
 
-
                     case 3:
                         updateSquareTypeMenu(doc, scanner);
                         break;
@@ -359,14 +358,18 @@ public class GameBoardSaver {
 
     public static boolean validateGameBoard(Document doc) {
         NodeList squares = doc.getElementsByTagName("squares");
-        boolean hasGO = false;
+        boolean hasGo = false;
         List<Integer> emptyPositions = new ArrayList<>();
-        List<Integer> goPositions = new ArrayList<>();
 
         for (int i = 0; i < squares.getLength(); i++) {
             Element square = (Element) squares.item(i);
             int position = Integer.parseInt(square.getAttribute("position"));
-            String name = square.getElementsByTagName("name").item(0).getTextContent().trim();
+
+            // Check if the name element exists
+            NodeList nameList = square.getElementsByTagName("name");
+            String name = (nameList.getLength() > 0 && nameList.item(0) != null) ?
+                    nameList.item(0).getTextContent().trim() : "";
+
             String type = square.getAttribute("type").trim();
 
             // Check for empty squares
@@ -374,10 +377,9 @@ public class GameBoardSaver {
                 emptyPositions.add(position);
             }
 
-            // Check for "GO" square
-            if ("GO".equalsIgnoreCase(name)) {
-                hasGO = true;
-                goPositions.add(position);
+            // Check for "Go" square by type
+            if ("Go".equalsIgnoreCase(type)) {
+                hasGo = true;
             }
         }
 
@@ -387,16 +389,9 @@ public class GameBoardSaver {
             return false; // Validation fails if there are empty squares
         }
 
-        // Check for "GO" square conditions
-        if (!hasGO) {
-            System.out.println("Error: There is no 'GO' square in the game board. Please add one.");
-            return false; // Validation fails if there is no "GO" square
-        }
-
-        if (goPositions.size() > 1) {
-            System.out.println("Error: There are multiple 'GO' squares at positions: " + goPositions +
-                    ". There can only be one 'GO' square. Please redesign the game board.");
-            return false; // Validation fails if there are multiple "GO" squares
+        if (!hasGo) {
+            System.out.println("Error: There is no 'Go' square in the game board. Please add one.");
+            return false;
         }
 
         return true; // Validation successful
