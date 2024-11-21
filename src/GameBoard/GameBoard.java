@@ -27,8 +27,4 @@ public class GameBoard {
     public List<Square> getSquareList() {
         return squareList;
     }
-
-    public void setSquareList(List<Square> squareList) {
-        this.squareList = squareList;
-    }
 }
