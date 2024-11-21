@@ -1,284 +1,425 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
-        
-    <MonopolyGame>
-                
-        <PlayerList>
-                        
-            <Player>
-                                
-                <Name/>
-                                
-                <Balance/>
-                                
-                <CurrentGameBoardPosition/>
-                                
-                <InJail/>
-                                
-                <TurnsInJail/>
-                            
-            </Player>
-                        
-            <Player>
-                                
-                <Name/>
-                                
-                <Balance/>
-                                
-                <CurrentGameBoardPosition/>
-                                
-                <InJail/>
-                                
-                <TurnsInJail/>
-                            
-            </Player>
-                    
-        </PlayerList>
-                
-        <GameBoard>
-                        
-            <squares position="1" type="Property">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="2" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="3" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="4" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="5" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="6" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="7" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="8" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="9" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="10" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="11" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="12" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="13" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="14" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="15" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="16" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="17" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="18" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="19" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                        
-            <squares position="20" type="">
-                                
-                <name/>
-                                
-                <price/>
-                                
-                <rent/>
-                                
-                <owner/>
-                            
-            </squares>
-                    
-        </GameBoard>
             
-    </MonopolyGame>
     
+    <MonopolyGame>
+                        
+        
+        <PlayerList>
+                                    
+            
+            <Player>
+                                                
+                
+                <Name/>
+                                                
+                
+                <Balance/>
+                                                
+                
+                <CurrentGameBoardPosition/>
+                                                
+                
+                <InJail/>
+                                                
+                
+                <TurnsInJail/>
+                                            
+            
+            </Player>
+                                    
+            
+            <Player>
+                                                
+                
+                <Name/>
+                                                
+                
+                <Balance/>
+                                                
+                
+                <CurrentGameBoardPosition/>
+                                                
+                
+                <InJail/>
+                                                
+                
+                <TurnsInJail/>
+                                            
+            
+            </Player>
+                                
+        
+        </PlayerList>
+                        
+        
+        <GameBoard>
+                                    
+            
+            <squares position="1" type="Property">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="2" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="3" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="4" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="5" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="6" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="7" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="8" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="9" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="10" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="11" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="12" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="13" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="14" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="15" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="16" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="17" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="18" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="19" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                    
+            
+            <squares position="20" type="">
+                                                
+                
+                <name/>
+                                                
+                
+                <price/>
+                                                
+                
+                <rent/>
+                                                
+                
+                <owner/>
+                                            
+            
+            </squares>
+                                
+        
+        </GameBoard>
+                    
+    
+    </MonopolyGame>
+        
+
 </root>
