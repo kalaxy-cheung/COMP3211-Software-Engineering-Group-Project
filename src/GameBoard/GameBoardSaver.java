@@ -218,6 +218,7 @@ public class GameBoardSaver {
         System.out.println("6. Go Jail");
         System.out.println("7. Go");
 
+
         int typeChoice = getUserInput(scanner, "Please enter a number: ");
         String newType = "";
 
@@ -267,6 +268,9 @@ public class GameBoardSaver {
         if (!found) {
             System.out.println("Position " + position + " not found.");
         }
+
+        GameBoardSaver.saveXML(doc,System.getProperty("user.dir") + "\\MonopolyGame.xml");
+
     }
 
     public static void updateSquarePosition(Document doc, int oldPosition, int newPosition) {
@@ -284,6 +288,9 @@ public class GameBoardSaver {
         if (!found) {
             System.out.println("Old position " + oldPosition + " not found.");
         }
+
+        GameBoardSaver.saveXML(doc,System.getProperty("user.dir") + "\\MonopolyGame.xml");
+
     }
 
     public static void updateSquareNameAndPrice(Document doc, int position, String newName, int newPrice) {
@@ -299,15 +306,18 @@ public class GameBoardSaver {
                 break; // Exit loop after updating
             }
         }
+
+        GameBoardSaver.saveXML(doc,System.getProperty("user.dir") + "\\MonopolyGame.xml");
+
         if (!found) {
             System.out.println("Position " + position + " not found.");
         }
     }
 
     public static void updateSquareType(Document doc, int position, String newType) {
+
         NodeList squares = doc.getElementsByTagName("squares");
         boolean found = false;
-        String filePath = System.getProperty("user.dir") + "\\MonopolyGame.xml";
         for (int i = 0; i < squares.getLength(); i++) {
             Element square = (Element) squares.item(i);
             if (Integer.parseInt(square.getAttribute("position")) == position) {
@@ -330,17 +340,7 @@ public class GameBoardSaver {
                     }
                     System.out.println("Removed name, price, rent, and owner for position " + position);
                 }
-                try {
-                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                    Transformer transformer = transformerFactory.newTransformer();
-                    DOMSource source = new DOMSource(doc);
-                    StreamResult result = new StreamResult(new File(filePath));
-                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                    transformer.transform(source, result);
-                }
-                catch (Exception e) {
-                    System.out.println("Error occurred while saving XML file: " + e.getMessage());
-                }
+                GameBoardSaver.saveXML(doc,System.getProperty("user.dir") + "\\MonopolyGame.xml");
 
                 System.out.println("Updated type for position " + position + " to " + newType);
                 found = true;
