@@ -70,7 +70,7 @@ public class Main {
                         switch (designChoice) {
                             case 1:
                                 // Create an empty game board XML file
-                                CreateEmptyxmlFile.createEmptyGameBoardXml(); // Call the method to create the file
+                                GameBoardSaver.createEmptyGameBoardXml(); // Call the method to create the file
                                 break;
 
                             case 2:
