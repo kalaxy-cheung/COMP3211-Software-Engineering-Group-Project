@@ -1,5 +1,6 @@
 import Game.GameController;
 import GameBoard.GameBoardSaver;
+import GameBoard.CreateEmptyxmlFile; // Import the CreateEmptyXmlFile class
 
 import java.io.File;
 import java.util.Scanner;
@@ -60,9 +61,39 @@ public class Main {
 
                     case 3:
                         // Design game board
-                        String xmlFileName = "defaultGameBoard.xml"; // Specify your XML file here
-                        GameBoardSaver.updateGameBoard(xmlFileName);
+                        System.out.println("Choose an option:");
+                        System.out.println("1. Create an empty game board XML file");
+                        System.out.println("2. Update an existing game board XML file");
+                        System.out.print("\u001B[36mChoice: \u001B[0m");
+
+                        int designChoice = scanner.nextInt();
+
+                        switch (designChoice) {
+                            case 1:
+                                // Create an empty game board XML file
+                                CreateEmptyxmlFile.createEmptyGameBoardXml(); // Call the method to create the file
+                                break;
+
+                            case 2:
+                                // Input existing game board file path
+                                System.out.print("Please enter the XML file path: ");
+                                String xmlFileName = scanner.next(); // Get user input for the file name
+
+                                // Error checking for file existence
+                                File xmlFile = new File(xmlFileName);
+                                if (!xmlFile.exists() || !xmlFile.isFile()) {
+                                    System.out.println("\n\u001B[31mThe specified XML file does not exist or is not a valid file. Please try again.\u001B[0m\n");
+                                } else {
+                                    GameBoardSaver.updateGameBoard(xmlFileName);
+                                }
+                                break;
+
+                            default:
+                                System.out.println("\u001B[31m\nInvalid choice. Please select a valid option.\n\u001B[0m");
+                                break;
+                        }
                         break;
+
                     case 4:
                         // Quit
                         System.out.println("Thank you for playing! Goodbye.");
@@ -76,8 +107,7 @@ public class Main {
 
             } catch (Exception e) {
                 System.out.println("\n\u001B[31mInvalid input. Please enter a valid number.\u001B[0m\n");
-                scanner.nextLine();
-
+                scanner.nextLine(); // Clear the invalid input
             }
         }
     }
