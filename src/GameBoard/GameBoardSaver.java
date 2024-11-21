@@ -20,7 +20,7 @@ import java.util.Scanner;
 public class GameBoardSaver {
     private static int saveCount = 1; // Counter to track the save number
 
-    public static void main(String[] args) {
+    public GameBoardSaver() {
         Scanner scanner = new Scanner(System.in);
         String fileName = "";
 
