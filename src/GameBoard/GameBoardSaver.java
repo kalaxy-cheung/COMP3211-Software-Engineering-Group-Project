@@ -88,67 +88,50 @@ public class GameBoardSaver {
                     case 1:
                         int positionToUpdate = getPositionInput(scanner, "Enter the position of the property to update: ");
 
-                        // Variables to hold current details
-                        String currentName = "";
-                        String currentPrice = "";
-                        String currentRent = "";
-                        boolean found = false;
-
-                        // List current details of the selected property
+                        // Check if the position exists
                         NodeList squares = doc.getElementsByTagName("squares");
+                        boolean found = false;
                         for (int i = 0; i < squares.getLength(); i++) {
                             Element square = (Element) squares.item(i);
                             if (Integer.parseInt(square.getAttribute("position")) == positionToUpdate) {
-                                currentName = square.getElementsByTagName("name").item(0).getTextContent().trim();
-                                currentPrice = square.getElementsByTagName("price").item(0).getTextContent().trim();
-                                currentRent = square.getElementsByTagName("rent").item(0).getTextContent().trim();
-
-                                System.out.println("Current details:");
-                                System.out.println("Name: " + currentName);
-                                System.out.println("Price: " + currentPrice);
-                                System.out.println("Rent: " + currentRent);
                                 found = true;
-                                break; // Exit loop after displaying details
+                                break;
                             }
                         }
 
                         if (!found) {
                             System.out.println("Position " + positionToUpdate + " not found.");
-                            break; // Exit case if property not found
+                            break;
                         }
 
-                        // Prompt user for what to update
-                        System.out.println("What would you like to update?");
-                        System.out.println("1. Update Name");
-                        System.out.println("2. Update Price");
-                        System.out.println("3. Update Rent");
+                        // Prompt user for new property details
+                        System.out.println("Enter the new details for the property in the format: name, price, rent");
+                        scanner.nextLine(); // Consume newline
+                        String propertyDetails = scanner.nextLine();
 
-                        int updateChoice = getUserInput(scanner, "Please enter a number: ");
-
-                        switch (updateChoice) {
-                            case 1:
-                                System.out.print("Enter the new name for the property: ");
-                                scanner.nextLine(); // Consume the newline
-                                String newName = scanner.nextLine();
-                                updateSquareNameAndPrice(doc, positionToUpdate, newName, Integer.parseInt(currentPrice)); // Keep the same price
+                        try {
+                            String[] details = propertyDetails.split(",");
+                            if (details.length != 3) {
+                                System.out.println("Error: Please provide the details in the correct format: name, price, rent");
                                 break;
+                            }
 
-                            case 2:
-                                int newPrice = getUserInput(scanner, "Enter the new price for the property: ");
-                                updateSquareNameAndPrice(doc, positionToUpdate, currentName, newPrice); // Keep the same name
-                                break;
+                            String newName = details[0].trim();
+                            int newPrice = Integer.parseInt(details[1].trim());
+                            int newRent = Integer.parseInt(details[2].trim());
 
-                            case 3:
-                                int newRent = getUserInput(scanner, "Enter the new rent amount: ");
-                                updateSquareRent(doc, positionToUpdate, newRent);
-                                break;
+                            // Update the square
+                            updateSquareNameAndPrice(doc, positionToUpdate, newName, newPrice);
+                            updateSquareRent(doc, positionToUpdate, newRent);
 
-                            default:
-                                System.out.println("Invalid choice. No changes made.");
-                                break;
+                            System.out.println("Property successfully updated.");
+
+                        } catch (NumberFormatException e) {
+                            System.out.println("Error: Price and rent must be valid numbers. Please try again.");
+                        } catch (Exception e) {
+                            System.out.println("An unexpected error occurred: " + e.getMessage());
                         }
                         break;
-
                     case 2:
                         int oldPosition = getPositionInput(scanner, "Enter the current position of the square to update: ");
                         int newPosition = getPositionInput(scanner, "Enter the new position: ");
@@ -253,6 +236,24 @@ public class GameBoardSaver {
         updateSquareType(doc, typePosition, newType);
     }
 
+    public static void updateSquareNameAndPrice(Document doc, int position, String newName, int newPrice) {
+        NodeList squares = doc.getElementsByTagName("squares");
+        boolean found = false;
+        for (int i = 0; i < squares.getLength(); i++) {
+            Element square = (Element) squares.item(i);
+            if (Integer.parseInt(square.getAttribute("position")) == position) {
+                square.getElementsByTagName("name").item(0).setTextContent(newName);
+                square.getElementsByTagName("price").item(0).setTextContent(String.valueOf(newPrice));
+                System.out.println("Updated square at position " + position + " to name: " + newName + " and price: " + newPrice);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Position " + position + " not found.");
+        }
+    }
+
     public static void updateSquareRent(Document doc, int position, int newRent) {
         NodeList squares = doc.getElementsByTagName("squares");
         boolean found = false;
@@ -260,29 +261,14 @@ public class GameBoardSaver {
             Element square = (Element) squares.item(i);
             if (Integer.parseInt(square.getAttribute("position")) == position) {
                 square.getElementsByTagName("rent").item(0).setTextContent(String.valueOf(newRent));
-                System.out.println("Updated rent for position " + position + " to " + newRent);
+                System.out.println("Updated rent for square at position " + position + " to " + newRent);
                 found = true;
-                try {
-                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                    Transformer transformer = transformerFactory.newTransformer();
-                    DOMSource source = new DOMSource(doc);
-                    String filePath = System.getProperty("user.dir") + "\\MonopolyGame.xml";
-                    StreamResult result = new StreamResult(new File(filePath));
-                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                    transformer.transform(source, result);
-                }
-                catch (Exception e) {
-                    System.out.println("Error occurred while saving XML file: " + e.getMessage());
-                }
-                break; // Exit loop after updating
+                break;
             }
         }
         if (!found) {
             System.out.println("Position " + position + " not found.");
         }
-
-
-
     }
 
     public static void updateSquarePosition(Document doc, int oldPosition, int newPosition) {
@@ -312,41 +298,8 @@ public class GameBoardSaver {
         if (!found) {
             System.out.println("Old position " + oldPosition + " not found.");
         }
-
-
-
-    }
-
-    public static void updateSquareNameAndPrice(Document doc, int position, String newName, int newPrice) {
-        NodeList squares = doc.getElementsByTagName("squares");
-        boolean found = false;
-        for (int i = 0; i < squares.getLength(); i++) {
-            Element square = (Element) squares.item(i);
-            if (Integer.parseInt(square.getAttribute("position")) == position) {
-                square.getElementsByTagName("name").item(0).setTextContent(newName);
-                square.getElementsByTagName("price").item(0).setTextContent(String.valueOf(newPrice));
-                System.out.println("Updated square at position " + position + " to name: " + newName + " and price: " + newPrice);
-                found = true;
-                try {
-                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                    Transformer transformer = transformerFactory.newTransformer();
-                    DOMSource source = new DOMSource(doc);
-                    String filePath = System.getProperty("user.dir") + "\\MonopolyGame.xml";
-                    StreamResult result = new StreamResult(new File(filePath));
-                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                    transformer.transform(source, result);
-                }
-                catch (Exception e) {
-                    System.out.println("Error occurred while saving XML file: " + e.getMessage());
-                }
-                break; // Exit loop after updating
-            }
-        }
-
-
-
         if (!found) {
-            System.out.println("Position " + position + " not found.");
+            System.out.println("Position " + newPosition + " not found.");
         }
     }
 
