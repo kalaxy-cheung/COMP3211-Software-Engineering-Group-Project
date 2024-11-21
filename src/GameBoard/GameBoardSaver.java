@@ -269,7 +269,18 @@ public class GameBoardSaver {
             System.out.println("Position " + position + " not found.");
         }
 
-        GameBoardSaver.saveXML(doc,System.getProperty("user.dir") + "\\MonopolyGame.xml");
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            String filePath = System.getProperty("user.dir") + "\\MonopolyGame.xml";
+            StreamResult result = new StreamResult(new File(filePath));
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(source, result);
+        }
+        catch (Exception e) {
+            System.out.println("Error occurred while saving XML file: " + e.getMessage());
+        }
 
     }
 
@@ -289,7 +300,18 @@ public class GameBoardSaver {
             System.out.println("Old position " + oldPosition + " not found.");
         }
 
-        GameBoardSaver.saveXML(doc,System.getProperty("user.dir") + "\\MonopolyGame.xml");
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            String filePath = System.getProperty("user.dir") + "\\MonopolyGame.xml";
+            StreamResult result = new StreamResult(new File(filePath));
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(source, result);
+        }
+        catch (Exception e) {
+            System.out.println("Error occurred while saving XML file: " + e.getMessage());
+        }
 
     }
 
@@ -307,7 +329,18 @@ public class GameBoardSaver {
             }
         }
 
-        GameBoardSaver.saveXML(doc,System.getProperty("user.dir") + "\\MonopolyGame.xml");
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            String filePath = System.getProperty("user.dir") + "\\MonopolyGame.xml";
+            StreamResult result = new StreamResult(new File(filePath));
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(source, result);
+        }
+        catch (Exception e) {
+            System.out.println("Error occurred while saving XML file: " + e.getMessage());
+        }
 
         if (!found) {
             System.out.println("Position " + position + " not found.");
@@ -340,7 +373,18 @@ public class GameBoardSaver {
                     }
                     System.out.println("Removed name, price, rent, and owner for position " + position);
                 }
-                GameBoardSaver.saveXML(doc,System.getProperty("user.dir") + "\\MonopolyGame.xml");
+                try {
+                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                    Transformer transformer = transformerFactory.newTransformer();
+                    DOMSource source = new DOMSource(doc);
+                    String filePath = System.getProperty("user.dir") + "\\MonopolyGame.xml";
+                    StreamResult result = new StreamResult(new File(filePath));
+                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                    transformer.transform(source, result);
+                }
+                catch (Exception e) {
+                    System.out.println("Error occurred while saving XML file: " + e.getMessage());
+                }
 
                 System.out.println("Updated type for position " + position + " to " + newType);
                 found = true;
