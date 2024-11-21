@@ -1,0 +1,764 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GameController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">Game</a>
+</div>
+
+<h1>Coverage Summary for Class: GameController (Game)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (6/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.8%
+  </span>
+  <span class="absValue">
+    (14/160)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10.5%
+  </span>
+  <span class="absValue">
+    (33/314)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package Game;
+&nbsp;
+&nbsp;import Dice.FourSidedDice;
+&nbsp;import GameBoard.GameBoardController;
+&nbsp;import Player.Player;
+&nbsp;import Player.PlayerController;
+&nbsp;import Square.*;
+&nbsp;import org.w3c.dom.Document;
+&nbsp;import org.w3c.dom.Element;
+&nbsp;import org.w3c.dom.Node;
+&nbsp;import org.w3c.dom.NodeList;
+&nbsp;
+&nbsp;import javax.xml.parsers.DocumentBuilder;
+&nbsp;import javax.xml.parsers.DocumentBuilderFactory;
+&nbsp;import javax.xml.transform.OutputKeys;
+&nbsp;import javax.xml.transform.Transformer;
+&nbsp;import javax.xml.transform.TransformerFactory;
+&nbsp;import javax.xml.transform.dom.DOMSource;
+&nbsp;import javax.xml.transform.stream.StreamResult;
+&nbsp;import java.io.File;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;public class GameController {</b>
+&nbsp;    private Game game;
+&nbsp;    private GameView gameView;
+&nbsp;    private boolean isNewGame;
+&nbsp;
+<b class="fc">&nbsp;    public GameController() {</b>
+<b class="fc">&nbsp;        this.game = new Game();</b>
+<b class="fc">&nbsp;        this.gameView = new GameView();</b>
+<b class="fc">&nbsp;        this.game.setGameBoard(new GameBoardController());</b>
+<b class="fc">&nbsp;        this.isNewGame = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private String generateRandomName() {
+&nbsp;        // Select a random name from the RANDOM_NAMES array
+<b class="fc">&nbsp;        Random random = new Random();</b>
+<b class="fc">&nbsp;        int index = random.nextInt(Game.RANDOM_NAMES.length);</b>
+<b class="fc">&nbsp;        return Game.RANDOM_NAMES[index];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void addNewPlayer(String playerName) {
+<b class="pc">&nbsp;        if(this.game.playerList.size() &gt;= Game.MAX_PLAYER_NUMBER) {</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="fc">&nbsp;        this.game.playerList.add(new PlayerController(playerName));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /*
+&nbsp;    *   game initialize
+&nbsp;    */
+&nbsp;    public void initializeGameBoard() {
+<b class="nc">&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+<b class="nc">&nbsp;        int function = 0;</b>
+&nbsp;
+&nbsp;        while (true) {
+<b class="nc">&nbsp;            System.out.println(&quot;1. using default game board&quot;);</b>
+<b class="nc">&nbsp;            System.out.println(&quot;2. import custom game board&quot;);</b>
+<b class="nc">&nbsp;            System.out.print(&quot;\u001B[36mChoice: \u001B[0m&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (scanner.hasNextInt()) {</b>
+<b class="nc">&nbsp;                function = scanner.nextInt();</b>
+<b class="nc">&nbsp;                if (function == 1 || function == 2) {</b>
+&nbsp;                    break; // Valid input, exit the loop
+&nbsp;                } else {
+<b class="nc">&nbsp;                    System.out.println(&quot;\n\u001B[31mInvalid input. Please enter a valid number (1 or 2).\u001B[0m\n&quot;);</b>
+&nbsp;                }
+&nbsp;            } else {
+<b class="nc">&nbsp;                System.out.println(&quot;\n\u001B[31mInvalid input. Please enter a number.\u001B[0m\n&quot;);</b>
+<b class="nc">&nbsp;                scanner.next(); // Consume the invalid input</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        String filePath = System.getProperty(&quot;user.dir&quot;) + &quot;/defaultGameBoard.xml&quot;; // default game board</b>
+&nbsp;
+<b class="nc">&nbsp;        if(function == 2) {</b>
+<b class="nc">&nbsp;            int res = -1;</b>
+<b class="nc">&nbsp;            while (res != 0) {</b>
+<b class="nc">&nbsp;                System.out.print(&quot;Please input the game data file path: &quot;);</b>
+<b class="nc">&nbsp;                String path = scanner.next();</b>
+<b class="nc">&nbsp;                res = this.game.getGameBoardController().loadGameBd(path);</b>
+<b class="nc">&nbsp;                if (res != 0) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;\n\u001B[31mThe specified file does not exist or is not a valid file. Please try again. &quot;</b>
+<b class="nc">&nbsp;                            + this.game.getGameBoardController().errorMsg + &quot;\u001B[0m\n&quot;);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        this.game.getGameBoardController().loadGameBd(filePath);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void initializeGamePlayer() {
+<b class="fc">&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+&nbsp;        int numPlayers;
+&nbsp;
+&nbsp;        // Loop until a valid number of players is entered
+&nbsp;        while (true) {
+<b class="fc">&nbsp;            System.out.print(&quot;Enter number of players (&quot; + Game.MIN_PLAYER_NUMBER + &quot; to &quot; + Game.MAX_PLAYER_NUMBER + &quot;): &quot;);</b>
+&nbsp;
+<b class="pc">&nbsp;            if (scanner.hasNextInt()) {</b>
+<b class="fc">&nbsp;                numPlayers = scanner.nextInt();</b>
+<b class="fc">&nbsp;                scanner.nextLine(); // Consume the remaining newline</b>
+&nbsp;
+<b class="fc">&nbsp;                if (numPlayers &gt;= Game.MIN_PLAYER_NUMBER &amp;&amp; numPlayers &lt;= Game.MAX_PLAYER_NUMBER) {</b>
+&nbsp;                    break; // Exit the loop if the input is valid
+&nbsp;                } else {
+<b class="fc">&nbsp;                    System.out.println(&quot;\n\u001B[31mInvalid number of players. Please enter a number between &quot;</b>
+&nbsp;                            + Game.MIN_PLAYER_NUMBER + &quot; and &quot; + Game.MAX_PLAYER_NUMBER + &quot;.\u001B[0m\n&quot;);
+&nbsp;                }
+&nbsp;            } else {
+<b class="nc">&nbsp;                System.out.println(&quot;\n\u001B[31mInvalid input. Please enter a valid number.\u001B[0m\n&quot;);</b>
+<b class="nc">&nbsp;                scanner.next(); // Consume the invalid input</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;Number of players set to: &quot; + numPlayers);</b>
+&nbsp;
+<b class="fc">&nbsp;        Set&lt;String&gt; playerNames = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; numPlayers; i++) {</b>
+<b class="fc">&nbsp;            System.out.print(&quot;Enter name for player &quot; + (i + 1) + &quot; (or press Enter for a random name): &quot;);</b>
+<b class="fc">&nbsp;            String inputName = scanner.nextLine().trim();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (inputName.isEmpty()) {</b>
+&nbsp;                // Generate a random name if no input is provided
+&nbsp;                do{
+<b class="fc">&nbsp;                    inputName = generateRandomName();</b>
+<b class="pc">&nbsp;                }while (playerNames.contains(inputName));</b>
+<b class="fc">&nbsp;                System.out.println(&quot;Randomly assigned name: &quot; + inputName);</b>
+&nbsp;            }
+&nbsp;            else {
+&nbsp;                // Ensure the name is unique
+<b class="pc">&nbsp;                while (playerNames.contains(inputName) || inputName.isEmpty()) {</b>
+<b class="fc">&nbsp;                    System.out.print(&quot;Name already taken. Please enter a different name: &quot;);</b>
+<b class="fc">&nbsp;                    inputName = scanner.nextLine().trim();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            playerNames.add(inputName);</b>
+<b class="fc">&nbsp;            addNewPlayer(inputName);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private String getSquareType(Square square) {
+<b class="nc">&nbsp;        if (square instanceof Property) return &quot;Property&quot;;</b>
+<b class="nc">&nbsp;        if (square instanceof IncomeTax) return &quot;IncomeTax&quot;;</b>
+<b class="nc">&nbsp;        if (square instanceof Jail) return &quot;Jail&quot;;</b>
+<b class="nc">&nbsp;        if (square instanceof Chance) return &quot;Chance&quot;;</b>
+<b class="nc">&nbsp;        if (square instanceof FreeParking) return &quot;FreeParking&quot;;</b>
+<b class="nc">&nbsp;        if (square instanceof GoJail) return &quot;GoJail&quot;;</b>
+<b class="nc">&nbsp;        if (square instanceof Go) return &quot;Go&quot;;</b>
+<b class="nc">&nbsp;        return &quot;Unknown&quot;; // Fallback for unknown square types</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /*
+&nbsp;    *   game logic
+&nbsp;    */
+&nbsp;    public void startGame() {
+&nbsp;
+<b class="nc">&nbsp;        if (game.playerList.peek() == null) {</b>
+<b class="nc">&nbsp;            throw new IllegalStateException(&quot;\u001B[31m\n\nPlayer list is empty. Cannot proceed with the game.\u001B[0m\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+&nbsp;
+&nbsp;        //The system shall place all player tokens on the &quot;Go&quot; square at the start of the game.
+<b class="nc">&nbsp;        if(isNewGame) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;********************************************&quot;);</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Game Start!&quot;);</b>
+<b class="nc">&nbsp;            initPlayerPos();</b>
+<b class="nc">&nbsp;            for (var player: this.game.playerList) {</b>
+<b class="nc">&nbsp;                player.getPlayer().setBalance(1500); // The system shall assign each player an initial amount of HKD 1500.</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;        else  {
+<b class="nc">&nbsp;            System.out.println(&quot;********************************************&quot;);</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Game Resume!&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        //The system shall end the game when only one player remains or after 100 rounds.
+<b class="nc">&nbsp;        while(game.currRound &lt;= Game.MAX_ROUNDS &amp;&amp; game.playerList.size()&gt;1) {</b>
+<b class="nc">&nbsp;            for (int i=0; i&lt;game.playerList.size(); i++){</b>
+&nbsp;
+<b class="nc">&nbsp;                System.out.println(&quot;********************************************\n&quot;);</b>
+<b class="nc">&nbsp;                System.out.printf(&quot;Round %d: %s&#39;s turn.\n&quot;, game.currRound, game.playerList.peek().getPlayer().getName());</b>
+&nbsp;                //game.getGameBoardController().getGameBoardView().displayGameBD(this.game.getGameBoardController().getGameBoard().filePath);
+<b class="nc">&nbsp;                gameView.printAllPlayerPosition(game.playerList);</b>
+&nbsp;
+<b class="nc">&nbsp;                PlayerController playerController = game.playerList.poll();</b>
+&nbsp;
+<b class="nc">&nbsp;                boolean threwDice = false;</b>
+<b class="nc">&nbsp;                while (!threwDice) {</b>
+&nbsp;
+&nbsp;                    // Display menu options for user input
+<b class="nc">&nbsp;                    System.out.println(&quot;\n********************************************&quot;);</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;1. Roll dice&quot;);</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;2. Query the next player&quot;);</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;3. Display player(s) status&quot;);</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;4. Display my status&quot;);</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;5. Display game board and players&#39; position&quot;);</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;6. Save game&quot;);</b>
+<b class="nc">&nbsp;                    System.out.print(&quot;Please enter your choice (1-6): &quot;);</b>
+&nbsp;
+&nbsp;                    // Read the input as a string
+<b class="nc">&nbsp;                    String input = scanner.nextLine().trim();</b>
+&nbsp;
+&nbsp;                    // Combine validation checks
+<b class="nc">&nbsp;                    if (input.isEmpty() || !input.matches(&quot;\\d+&quot;) || (Integer.parseInt(input) &lt; 1 || Integer.parseInt(input) &gt; 6)) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;\n\u001B[31mInvalid input! Please enter a valid number between 1 and 6.\u001B[0m\n&quot;);</b>
+&nbsp;                        continue;
+&nbsp;                    }
+&nbsp;
+&nbsp;                    // If input is valid, convert it to an integer
+<b class="nc">&nbsp;                    int function = Integer.parseInt(input);</b>
+&nbsp;
+&nbsp;                    // Handle valid commands
+<b class="nc">&nbsp;                    switch (function) {</b>
+&nbsp;                        case 1:
+<b class="nc">&nbsp;                            threwDice = true; // Assuming this indicates that dice have been rolled</b>
+&nbsp;                            break;
+&nbsp;                        case 2:
+<b class="nc">&nbsp;                            System.out.println(&quot;\u001B[32mThe next player is &quot; + this.game.playerList.peek().getPlayer().getName() + &quot;\u001B[0m&quot;);</b>
+&nbsp;                            break;
+&nbsp;                        case 3:
+<b class="nc">&nbsp;                            System.out.println(&quot;Displaying player(s) status...&quot;);</b>
+<b class="nc">&nbsp;                            displayPlyerStatus(playerController);</b>
+&nbsp;                            break;
+&nbsp;                        case 4:
+<b class="nc">&nbsp;                            playerController.getPlayerView().displayStatus(playerController.getPlayer());</b>
+&nbsp;                            break;
+&nbsp;                        case 5:
+<b class="nc">&nbsp;                            game.getGameBoardController().getGameBoardView().displayGameBD(this.game.getGameBoardController().getGameBoard().filePath);</b>
+<b class="nc">&nbsp;                            gameView.printAllPlayerPosition(game.playerList);</b>
+<b class="nc">&nbsp;                            playerController.getPlayerView().printPlayerPosition(playerController.getPlayer());</b>
+&nbsp;                            break;
+&nbsp;                        case 6:
+<b class="nc">&nbsp;                            System.out.println(&quot;Saving game...&quot;);</b>
+<b class="nc">&nbsp;                            game.playerList.add(playerController);</b>
+<b class="nc">&nbsp;                            saveGameData();</b>
+&nbsp;                            return;
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                System.out.println(&quot;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                if(playerController.getPlayer().isInJail()) {</b>
+<b class="nc">&nbsp;                    game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition())</b>
+<b class="nc">&nbsp;                            .access(playerController.getPlayer());</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                if(!playerController.getPlayer().isInJail()){</b>
+<b class="nc">&nbsp;                    int diceResult = 0;</b>
+<b class="nc">&nbsp;                    if (playerController.getPlayer().getReleaseFromJailRoll() == 0) {</b>
+&nbsp;                        // roll the dice
+<b class="nc">&nbsp;                        System.out.println(&quot;Rolling dice...&quot;);</b>
+<b class="nc">&nbsp;                        FourSidedDice dice = new FourSidedDice();</b>
+<b class="nc">&nbsp;                        diceResult = dice.rollTwoDice();</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;Rolling dice result: &quot; + diceResult);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        diceResult = playerController.getPlayer().getReleaseFromJailRoll();</b>
+<b class="nc">&nbsp;                        playerController.getPlayer().setReleaseFromJailRoll(0);</b>
+&nbsp;
+&nbsp;                    }
+&nbsp;                    // Save initial position of player before update
+<b class="nc">&nbsp;                    int currentPos = playerController.getPlayer().getCurrGameBdPosition();</b>
+&nbsp;
+&nbsp;                    // print the updated user position
+&nbsp;                    //game.getGameBoardController().getGameBoardView().displayGameBD();
+<b class="nc">&nbsp;                    playerController.getPlayer().setCurrGameBdPosition(playerController.getPlayer().getCurrGameBdPosition()+diceResult);</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;Current player position: &quot; + playerController.getPlayer().getCurrGameBdPosition());</b>
+&nbsp;
+&nbsp;                    // Save updated position
+<b class="nc">&nbsp;                    int newPos = playerController.getPlayer().getCurrGameBdPosition();</b>
+&nbsp;
+&nbsp;                    // Check whether player has passed GO
+<b class="nc">&nbsp;                    if ((newPos - currentPos) &lt; 0 &amp;&amp; newPos != 1) {</b>
+<b class="nc">&nbsp;                        Square goSquare = game.getGameBoardController().getSquareByPosition(1);</b>
+<b class="nc">&nbsp;                        goSquare.access(playerController.getPlayer());</b>
+&nbsp;                    }
+&nbsp;
+&nbsp;                    // start the Squares actions
+<b class="nc">&nbsp;                    Square square = game.getGameBoardController().getSquareByPosition(playerController.getPlayer().getCurrGameBdPosition());</b>
+<b class="nc">&nbsp;                    square.access(playerController.getPlayer());</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                if (playerController.getPlayer().getBalance() &gt; 0) {</b>
+<b class="nc">&nbsp;                    game.playerList.add(playerController);</b>
+&nbsp;                } else {
+&nbsp;                    // Remove all properties owned by the player
+<b class="nc">&nbsp;                    List&lt;Property&gt; propertiesToRemove = new ArrayList&lt;&gt;(playerController.getPlayer().getOwnedProperties());</b>
+&nbsp;
+<b class="nc">&nbsp;                    for (Property property : propertiesToRemove) {</b>
+<b class="nc">&nbsp;                        property.setOwner(null); // Reset ownership of the property</b>
+<b class="nc">&nbsp;                        playerController.getPlayer().removeProperty(property); // Remove property from the player&#39;s list</b>
+&nbsp;                    }
+&nbsp;
+<b class="nc">&nbsp;                    System.out.println(&quot;\u001B[31m&quot; + playerController.getPlayer().getName() +</b>
+&nbsp;                            &quot; has been removed from the game and their properties are now unowned.\u001B[0m&quot;);
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            game.currRound++;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if(game.playerList.size() &gt; 1){</b>
+<b class="nc">&nbsp;            List&lt;Player&gt; winners = getRichestPlayers();</b>
+<b class="nc">&nbsp;            gameView.printWinners(winners);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            assert game.playerList.peek() != null;</b>
+<b class="nc">&nbsp;            Player winner = game.playerList.peek().getPlayer();</b>
+<b class="nc">&nbsp;            gameView.printWinners(winner);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public int saveGameData() {
+&nbsp;        // Define the file path within the project directory
+<b class="nc">&nbsp;        String filePath = System.getProperty(&quot;user.dir&quot;) + &quot;\\savedGameData.xml&quot;;</b>
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();</b>
+<b class="nc">&nbsp;            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();</b>
+<b class="nc">&nbsp;            Document doc = dBuilder.newDocument();</b>
+&nbsp;
+&nbsp;            // Root element
+<b class="nc">&nbsp;            Element rootElement = doc.createElement(&quot;root&quot;);</b>
+<b class="nc">&nbsp;            doc.appendChild(rootElement);</b>
+&nbsp;
+&nbsp;            // MonopolyGame element
+<b class="nc">&nbsp;            Element monopolyGameElement = doc.createElement(&quot;MonopolyGame&quot;);</b>
+<b class="nc">&nbsp;            rootElement.appendChild(monopolyGameElement);</b>
+&nbsp;
+&nbsp;            // Round element
+<b class="nc">&nbsp;            Element currRoundElement = doc.createElement(&quot;CurrRound&quot;);</b>
+<b class="nc">&nbsp;            currRoundElement.appendChild(doc.createTextNode(String.valueOf(this.game.currRound)));</b>
+<b class="nc">&nbsp;            monopolyGameElement.appendChild(currRoundElement);</b>
+&nbsp;
+&nbsp;            // PlayerList element
+<b class="nc">&nbsp;            Element playerListElement = doc.createElement(&quot;PlayerList&quot;);</b>
+<b class="nc">&nbsp;            monopolyGameElement.appendChild(playerListElement);</b>
+&nbsp;
+&nbsp;            // Save Player data
+<b class="nc">&nbsp;            for (PlayerController playerController : game.playerList) {</b>
+<b class="nc">&nbsp;                Player player = playerController.getPlayer();</b>
+&nbsp;
+<b class="nc">&nbsp;                Element playerElement = doc.createElement(&quot;Player&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                Element nameElement = doc.createElement(&quot;Name&quot;);</b>
+<b class="nc">&nbsp;                nameElement.appendChild(doc.createTextNode(player.getName()));</b>
+<b class="nc">&nbsp;                playerElement.appendChild(nameElement);</b>
+&nbsp;
+<b class="nc">&nbsp;                Element balanceElement = doc.createElement(&quot;Balance&quot;);</b>
+<b class="nc">&nbsp;                balanceElement.appendChild(doc.createTextNode(String.valueOf(player.getBalance())));</b>
+<b class="nc">&nbsp;                playerElement.appendChild(balanceElement);</b>
+&nbsp;
+<b class="nc">&nbsp;                Element currGameBdPositionElement = doc.createElement(&quot;CurrentGameBoardPosition&quot;);</b>
+<b class="nc">&nbsp;                currGameBdPositionElement.appendChild(doc.createTextNode(String.valueOf(player.getCurrGameBdPosition())));</b>
+<b class="nc">&nbsp;                playerElement.appendChild(currGameBdPositionElement);</b>
+&nbsp;
+<b class="nc">&nbsp;                Element inJailElement = doc.createElement(&quot;InJail&quot;);</b>
+<b class="nc">&nbsp;                inJailElement.appendChild(doc.createTextNode(String.valueOf(player.isInJail())));</b>
+<b class="nc">&nbsp;                playerElement.appendChild(inJailElement);</b>
+&nbsp;
+<b class="nc">&nbsp;                Element turnsInJailElement = doc.createElement(&quot;TurnsInJail&quot;);</b>
+<b class="nc">&nbsp;                turnsInJailElement.appendChild(doc.createTextNode(String.valueOf(player.getTurnsInJail())));</b>
+<b class="nc">&nbsp;                playerElement.appendChild(turnsInJailElement);</b>
+&nbsp;
+<b class="nc">&nbsp;                playerListElement.appendChild(playerElement);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // GameBoard element
+<b class="nc">&nbsp;            Element gameBoardElement = doc.createElement(&quot;GameBoard&quot;);</b>
+<b class="nc">&nbsp;            monopolyGameElement.appendChild(gameBoardElement);</b>
+&nbsp;
+&nbsp;            // Save Game Board Squares
+<b class="nc">&nbsp;            for (int i = 0; i &lt; game.getGameBoardController().getGameBoard().getSquareList().size(); i++) {</b>
+<b class="nc">&nbsp;                Square square = game.getGameBoardController().getGameBoard().getSquareList().get(i);</b>
+&nbsp;
+<b class="nc">&nbsp;                Element squareElement = doc.createElement(&quot;squares&quot;);</b>
+<b class="nc">&nbsp;                squareElement.setAttribute(&quot;position&quot;, String.valueOf(i + 1)); // Convert position to String</b>
+<b class="nc">&nbsp;                squareElement.setAttribute(&quot;type&quot;, getSquareType(square)); // Convert type to String based on guide</b>
+&nbsp;
+<b class="nc">&nbsp;                if (square instanceof Property) {</b>
+<b class="nc">&nbsp;                    Property property = (Property) square;</b>
+&nbsp;
+<b class="nc">&nbsp;                    Element nameElement = doc.createElement(&quot;name&quot;);</b>
+<b class="nc">&nbsp;                    nameElement.appendChild(doc.createTextNode(property.getName()));</b>
+<b class="nc">&nbsp;                    squareElement.appendChild(nameElement);</b>
+&nbsp;
+<b class="nc">&nbsp;                    Element priceElement = doc.createElement(&quot;price&quot;);</b>
+<b class="nc">&nbsp;                    priceElement.appendChild(doc.createTextNode(String.valueOf(property.getPrice())));</b>
+<b class="nc">&nbsp;                    squareElement.appendChild(priceElement);</b>
+&nbsp;
+<b class="nc">&nbsp;                    Element rentElement = doc.createElement(&quot;rent&quot;);</b>
+<b class="nc">&nbsp;                    rentElement.appendChild(doc.createTextNode(String.valueOf(property.getRent())));</b>
+<b class="nc">&nbsp;                    squareElement.appendChild(rentElement);</b>
+&nbsp;
+<b class="nc">&nbsp;                    Element ownerElement = doc.createElement(&quot;owner&quot;);</b>
+<b class="nc">&nbsp;                    ownerElement.appendChild(doc.createTextNode(property.getOwner() != null ? property.getOwner() : &quot;&quot;));</b>
+<b class="nc">&nbsp;                    squareElement.appendChild(ownerElement);</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                gameBoardElement.appendChild(squareElement);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // Write the XML file
+<b class="nc">&nbsp;            TransformerFactory transformerFactory = TransformerFactory.newInstance();</b>
+<b class="nc">&nbsp;            Transformer transformer = transformerFactory.newTransformer();</b>
+<b class="nc">&nbsp;            DOMSource source = new DOMSource(doc);</b>
+<b class="nc">&nbsp;            StreamResult result = new StreamResult(new File(filePath));</b>
+<b class="nc">&nbsp;            transformer.setOutputProperty(OutputKeys.INDENT, &quot;yes&quot;);</b>
+<b class="nc">&nbsp;            transformer.transform(source, result);</b>
+&nbsp;
+<b class="nc">&nbsp;            System.out.println(&quot;\u001B[32mGame data saved successfully at: &quot; + filePath + &quot;\u001B[0m&quot;);</b>
+<b class="nc">&nbsp;            return 0; // Success</b>
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            return -1; // Failure</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void displayPlyerStatus(PlayerController playerController) {
+<b class="nc">&nbsp;        Scanner scanner = new Scanner(System.in); // Ensure you have a scanner instance</b>
+<b class="nc">&nbsp;        System.out.println(&quot;\u001B[32mEnter the player name to view their status, or enter &#39;*&#39; to see all players&#39; info:\u001B[0m&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        String input = scanner.nextLine(); // Read user input</b>
+<b class="nc">&nbsp;        boolean playerFound = true;</b>
+&nbsp;
+<b class="nc">&nbsp;        if (input.equals(&quot;*&quot;)) {</b>
+<b class="nc">&nbsp;            playerController.getPlayerView().displayStatus(playerController.getPlayer());</b>
+&nbsp;            // Display all players&#39; information
+<b class="nc">&nbsp;            for(var player : game.playerList) {</b>
+<b class="nc">&nbsp;                player.getPlayerView().displayStatus(player.getPlayer());</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        } else {
+&nbsp;            // Display specific player&#39;s information
+<b class="nc">&nbsp;            playerFound = false;</b>
+<b class="nc">&nbsp;            for(var player : game.playerList) {</b>
+<b class="nc">&nbsp;                if(player.getPlayer().getName().equals(input)){</b>
+<b class="nc">&nbsp;                    playerFound = true;</b>
+<b class="nc">&nbsp;                    player.getPlayerView().displayStatus(player.getPlayer());</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            if(playerController.getPlayer().getName().equals(input)) {</b>
+<b class="nc">&nbsp;                playerFound = true;</b>
+<b class="nc">&nbsp;                playerController.getPlayerView().displayStatus(playerController.getPlayer());</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if(!playerFound) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;\u001B[32mCannot find player: &quot; + input + &quot;\u001B[0m&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void initPlayerPos(){
+<b class="nc">&nbsp;        for(var player : game.playerList) {</b>
+<b class="nc">&nbsp;            player.getPlayer().setCurrGameBdPosition(game.getGameBoardController().getGameBoard().getStartSquareIndex());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Player&gt; getRichestPlayers(){
+<b class="nc">&nbsp;        List&lt;Player&gt; res = new ArrayList&lt;Player&gt;();</b>
+<b class="nc">&nbsp;        int largest = Integer.MIN_VALUE;</b>
+<b class="nc">&nbsp;        for(var player : game.playerList) {</b>
+<b class="nc">&nbsp;            if(player.getPlayer().getBalance() &gt; largest) {</b>
+<b class="nc">&nbsp;                largest = player.getPlayer().getBalance();</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        for(var player : game.playerList) {</b>
+<b class="nc">&nbsp;            if(player.getPlayer().getBalance() == largest) {</b>
+<b class="nc">&nbsp;                res.add(player.getPlayer());</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return  res;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /*
+&nbsp;    *   load the game data by a json file for resuming a previous game
+&nbsp;    */
+&nbsp;    public int loadGameData(String filePath) {
+<b class="nc">&nbsp;        System.out.printf(&quot;Loading the game from %s%n&quot;, filePath);</b>
+&nbsp;
+<b class="nc">&nbsp;        this.game.getGameBoardController().loadGameBd(filePath);</b>
+&nbsp;
+<b class="nc">&nbsp;        System.out.print(&quot;\nReading Players and Properties...\n&quot;);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            File xmlFile = new File(filePath);</b>
+<b class="nc">&nbsp;            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();</b>
+<b class="nc">&nbsp;            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();</b>
+<b class="nc">&nbsp;            Document doc = dBuilder.parse(xmlFile);</b>
+&nbsp;
+<b class="nc">&nbsp;            doc.getDocumentElement().normalize();</b>
+&nbsp;
+&nbsp;
+&nbsp;            // round handling
+<b class="nc">&nbsp;            Node currRoundNode = doc.getElementsByTagName(&quot;CurrRound&quot;).item(0);</b>
+<b class="nc">&nbsp;            if (currRoundNode == null || currRoundNode.getTextContent().isEmpty()) {</b>
+<b class="nc">&nbsp;                System.err.println(&quot;Error: CurrRound is not defined.&quot;);</b>
+<b class="nc">&nbsp;                return -1;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            this.game.currRound = Integer.parseInt(currRoundNode.getTextContent());</b>
+&nbsp;
+&nbsp;            // players handling
+&nbsp;            // Parse players
+<b class="nc">&nbsp;            NodeList playerNodes = doc.getElementsByTagName(&quot;Player&quot;);</b>
+<b class="nc">&nbsp;            if (playerNodes.getLength() &gt; 0) {</b>
+<b class="nc">&nbsp;                for (int i = 0; i &lt; playerNodes.getLength(); i++) {</b>
+<b class="nc">&nbsp;                    Node playerNode = playerNodes.item(i);</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (playerNode.getNodeType() == Node.ELEMENT_NODE) {</b>
+<b class="nc">&nbsp;                        Element playerElement = (Element) playerNode;</b>
+&nbsp;
+<b class="nc">&nbsp;                        String name = getTagValue(&quot;Name&quot;, playerElement);</b>
+<b class="nc">&nbsp;                        String balanceStr = getTagValue(&quot;Balance&quot;, playerElement);</b>
+&nbsp;
+<b class="nc">&nbsp;                        if (name == null || name.isEmpty()) {</b>
+<b class="nc">&nbsp;                            System.out.println(&quot;\u001B[31mError: Missing or empty player name for player at index &quot; + i + &quot;\u001B[0m&quot;);</b>
+<b class="nc">&nbsp;                            return -1;</b>
+&nbsp;                        }
+&nbsp;
+&nbsp;                        int balance;
+&nbsp;                        try {
+<b class="nc">&nbsp;                            balance = Integer.parseInt(balanceStr);</b>
+&nbsp;                        } catch (NumberFormatException e) {
+<b class="nc">&nbsp;                            System.out.println(&quot;\u001B[31mError: Invalid balance value for player at index &quot; + i + &quot;. Must be an integer.\u001B[0m&quot;);</b>
+<b class="nc">&nbsp;                            return -1;</b>
+&nbsp;                        }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;                        int currGameBdPosition = Integer.parseInt(getTagValue(&quot;CurrentGameBoardPosition&quot;, playerElement));</b>
+<b class="nc">&nbsp;                        boolean inJail = Boolean.parseBoolean(getTagValue(&quot;InJail&quot;, playerElement));</b>
+<b class="nc">&nbsp;                        int turnsInJail = Integer.parseInt(getTagValue(&quot;TurnsInJail&quot;, playerElement));</b>
+&nbsp;
+&nbsp;                        // Create player object
+<b class="nc">&nbsp;                        Player player = new Player(name);</b>
+<b class="nc">&nbsp;                        player.setBalance(balance);</b>
+<b class="nc">&nbsp;                        player.setCurrGameBdPosition(currGameBdPosition);</b>
+<b class="nc">&nbsp;                        player.setInJail(inJail);</b>
+<b class="nc">&nbsp;                        player.setTurnsInJail(turnsInJail);</b>
+&nbsp;
+&nbsp;                        // Add player to the player list
+<b class="nc">&nbsp;                        game.playerList.add(new PlayerController(player));</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            } else {
+<b class="nc">&nbsp;                return -1; // No players found</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // Parse properties
+&nbsp;            // Assign properties to players based on the game board and owner name
+<b class="nc">&nbsp;            NodeList squareNodes = doc.getElementsByTagName(&quot;squares&quot;);</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; squareNodes.getLength(); i++) {</b>
+<b class="nc">&nbsp;                Node squareNode = squareNodes.item(i);</b>
+&nbsp;
+<b class="nc">&nbsp;                if (squareNode.getNodeType() == Node.ELEMENT_NODE) {</b>
+<b class="nc">&nbsp;                    Element squareElement = (Element) squareNode;</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (&quot;Property&quot;.equals(squareElement.getAttribute(&quot;type&quot;))) {</b>
+<b class="nc">&nbsp;                        String name = getTagValue(&quot;name&quot;, squareElement);</b>
+<b class="nc">&nbsp;                        String ownerName = getTagValue(&quot;owner&quot;, squareElement);</b>
+&nbsp;
+&nbsp;                        // Retrieve the existing property from the game board
+<b class="nc">&nbsp;                        for (Square square : game.getGameBoardController().getGameBoard().getSquareList()) {</b>
+<b class="nc">&nbsp;                            if (square instanceof Property) {</b>
+<b class="nc">&nbsp;                                Property property = (Property) square;</b>
+<b class="nc">&nbsp;                                if (property.getName().equals(name)) {</b>
+&nbsp;                                    // Assign ownership if an owner is specified
+<b class="nc">&nbsp;                                    if (ownerName != null &amp;&amp; !ownerName.isEmpty()) {</b>
+<b class="nc">&nbsp;                                        for (PlayerController pc : game.playerList) {</b>
+<b class="nc">&nbsp;                                            Player player = pc.getPlayer();</b>
+<b class="nc">&nbsp;                                            if (player.getName().equals(ownerName)) {</b>
+<b class="nc">&nbsp;                                                property.setOwner(player);</b>
+<b class="nc">&nbsp;                                                player.addProperty(property); // Add the existing property to the player&#39;s owned list</b>
+&nbsp;                                                break;
+&nbsp;                                            }
+&nbsp;                                        }
+&nbsp;                                    }
+&nbsp;                                    break; // Stop searching once the property is found
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;
+&nbsp;            // Display all players&#39; information
+<b class="nc">&nbsp;            System.out.println(&quot;\nDisplaying all players&#39; information:&quot;);</b>
+<b class="nc">&nbsp;            for (PlayerController pc : game.playerList) {</b>
+<b class="nc">&nbsp;                Player player = pc.getPlayer();</b>
+<b class="nc">&nbsp;                System.out.println(&quot;\u001B[32m\nPlayer: &quot; + player.getName() + &quot;\u001B[0m&quot;);</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Balance: &quot; + player.getBalance());</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Current Game Board Position: &quot; + player.getCurrGameBdPosition());</b>
+<b class="nc">&nbsp;                System.out.println(&quot;In Jail: &quot; + player.isInJail());</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Turns in Jail: &quot; + player.getTurnsInJail());</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Owned Properties: &quot; + player.getOwnedList());</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            System.err.println(&quot;Error: Failed to load game data. &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            return -1;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        this.isNewGame = false;</b>
+<b class="nc">&nbsp;        return 0; // Success</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    private String getTagValue(String tagName, Element element) {
+<b class="nc">&nbsp;        NodeList nodeList = element.getElementsByTagName(tagName);</b>
+<b class="nc">&nbsp;        if (nodeList != null &amp;&amp; nodeList.getLength() &gt; 0) {</b>
+<b class="nc">&nbsp;            Node node = nodeList.item(0);</b>
+<b class="nc">&nbsp;            return node.getTextContent();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Game getGame() {
+<b class="fc">&nbsp;        return game;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setGame(Game game) {
+<b class="nc">&nbsp;        this.game = game;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public GameView getGameView() {
+<b class="nc">&nbsp;        return gameView;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setGameView(GameView gameView) {
+<b class="nc">&nbsp;        this.gameView = gameView;</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-19 21:29</div>
+</div>
+</body>
+</html>

@@ -2,6 +2,7 @@
 <root>
     <MonopolyGame>
         <GameBoard>
+            <CurrRound>1</CurrRound>
             <squares position="1" type="Go"></squares>
             <squares position="2" type="Property">
                 <name>Central</name>

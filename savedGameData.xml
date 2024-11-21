@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
     <MonopolyGame>
-        <CurrRound>101</CurrRound>
+        <CurrRound>2</CurrRound>
         <PlayerList>
             <Player>
-                <Name>Paul</Name>
-                <Balance>1500</Balance>
-                <CurrentGameBoardPosition>4</CurrentGameBoardPosition>
+                <Name>1</Name>
+                <Balance>1350</Balance>
+                <CurrentGameBoardPosition>9</CurrentGameBoardPosition>
                 <InJail>false</InJail>
                 <TurnsInJail>0</TurnsInJail>
             </Player>
             <Player>
-                <Name>Katherine</Name>
+                <Name>k</Name>
                 <Balance>1500</Balance>
-                <CurrentGameBoardPosition>1</CurrentGameBoardPosition>
+                <CurrentGameBoardPosition>6</CurrentGameBoardPosition>
                 <InJail>false</InJail>
                 <TurnsInJail>0</TurnsInJail>
             </Player>
@@ -24,40 +24,40 @@
                 <name>Central</name>
                 <price>800</price>
                 <rent>90</rent>
-                <owner>Paul</owner>
+                <owner/>
             </squares>
             <squares position="3" type="Property">
                 <name>Wan Chai</name>
                 <price>700</price>
                 <rent>65</rent>
-                <owner>Paul</owner>
+                <owner/>
             </squares>
             <squares position="4" type="IncomeTax"/>
             <squares position="5" type="Property">
                 <name>Stanley</name>
                 <price>600</price>
                 <rent>60</rent>
-                <owner>Paul</owner>
+                <owner/>
             </squares>
             <squares position="6" type="Jail"/>
             <squares position="7" type="Property">
                 <name>Shek O</name>
                 <price>400</price>
                 <rent>10</rent>
-                <owner>Paul</owner>
+                <owner/>
             </squares>
             <squares position="8" type="Property">
                 <name>Mong Kok</name>
                 <price>500</price>
                 <rent>40</rent>
-                <owner>Paul</owner>
+                <owner/>
             </squares>
             <squares position="9" type="Chance"/>
             <squares position="10" type="Property">
                 <name>Tsing Yi</name>
                 <price>400</price>
                 <rent>15</rent>
-                <owner>Paul</owner>
+                <owner/>
             </squares>
             <squares position="11" type="FreeParking"/>
             <squares position="12" type="Property">

@@ -307,6 +307,7 @@ public class GameBoardSaver {
     public static void updateSquareType(Document doc, int position, String newType) {
         NodeList squares = doc.getElementsByTagName("squares");
         boolean found = false;
+        String filePath = System.getProperty("user.dir") + "\\MonopolyGame.xml";
         for (int i = 0; i < squares.getLength(); i++) {
             Element square = (Element) squares.item(i);
             if (Integer.parseInt(square.getAttribute("position")) == position) {
@@ -328,6 +329,17 @@ public class GameBoardSaver {
                         square.removeChild(square.getElementsByTagName("owner").item(0));
                     }
                     System.out.println("Removed name, price, rent, and owner for position " + position);
+                }
+                try {
+                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                    Transformer transformer = transformerFactory.newTransformer();
+                    DOMSource source = new DOMSource(doc);
+                    StreamResult result = new StreamResult(new File(filePath));
+                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                    transformer.transform(source, result);
+                }
+                catch (Exception e) {
+                    System.out.println("Error occurred while saving XML file: " + e.getMessage());
                 }
 
                 System.out.println("Updated type for position " + position + " to " + newType);
