@@ -1,6 +1,6 @@
 import Game.GameController;
 import GameBoard.GameBoardSaver;
-import GameBoard.CreateEmptyxmlFile; // Import the CreateEmptyXmlFile class
+
 
 import java.io.File;
 import java.util.Scanner;
@@ -71,7 +71,7 @@ public class Main {
                         switch (designChoice) {
                             case 1:
                                 // Create an empty game board XML file
-                                CreateEmptyxmlFile.createEmptyGameBoardXml(); // Call the method to create the file
+                                GameBoardSaver.createEmptyGameBoardXml(); // Call the method to create the file
                                 break;
 
                             case 2:
