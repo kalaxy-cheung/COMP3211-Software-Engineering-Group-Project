@@ -47,10 +47,6 @@ public class PlayerController {
         return playerView;
     }
 
-    public void setPlayerView(PlayerView playerView) {
-        this.playerView = playerView;
-    }
-
     // Load players from XML
     public int loadPlayerFromXML(String filePath) {
         try {

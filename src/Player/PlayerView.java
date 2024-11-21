@@ -13,6 +13,4 @@ public class PlayerView {
         System.out.println("Turns in Jail: " + player.getTurnsInJail());
         System.out.println("Owned Properties: " + player.getOwnedList());
     }
-
-
 }

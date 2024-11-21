@@ -1,6 +1,5 @@
 import Game.GameController;
 import GameBoard.GameBoardSaver;
-import GameBoard.CreateEmptyxmlFile; // Import the CreateEmptyXmlFile class
 
 import java.io.File;
 import java.util.Scanner;
